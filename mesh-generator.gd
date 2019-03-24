@@ -53,7 +53,7 @@ func makeFaces(voxel):
 	var filledFaces = [] #Array of faces active on the voxel
 	var faces = [
 		[Vector3(2, 2, 2), Vector3(2, -2, 2), Vector3(-2, -2, 2), Vector3(-2, 2, 2)],
-		[Vector3(2, 2, 2), Vector3(2, -2, 2), Vector3(2, 2, -2), Vector3(2, -2, -2)],
+		[Vector3(2, 2, 2), Vector3(2, 2, -2), Vector3(2, -2, -2), Vector3(2, -2, 2),],
 		[Vector3(2, 2, 2), Vector3(2, 2, -2), Vector3(-2, 2, -2), Vector3(-2, 2, 2)],
 		[Vector3(2, 2, -2), Vector3(-2, 2, -2), Vector3(-2, -2, -2), Vector3(2, -2, -2)],
 		[Vector3(-2, -2, 2), Vector3(-2, 2, 2), Vector3(-2, 2, -2), Vector3(-2, -2, -2)],
