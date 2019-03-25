@@ -4,7 +4,7 @@
 
 [node name="Spatial" type="Spatial"]
 script = ExtResource( 1 )
-voxels = [ Vector3( 1, 2, 1 ), Vector3( 1, 1, 2 ), Vector3( 1, 2, 2 ), Vector3( 2, 2, 2 ) ]
+voxels = [ Vector3( 1, 2, 1 ), Vector3( 1, 1, 2 ), Vector3( 1, 2, 2 ), Vector3( 2, 2, 2 ), Vector3( 2, 2, 1 ), Vector3( 2, 1, 2 ), Vector3( 4, 3, 5 ) ]
 
 [node name="Camera" type="Camera" parent="."]
 transform = Transform( 1, 0, 0, 0, 0.897734, 0.440538, 0, -0.440538, 0.897734, 0, 6.16376, 6.37841 )

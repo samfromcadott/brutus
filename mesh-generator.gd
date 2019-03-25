@@ -63,13 +63,15 @@ func makeFaces(voxel):
 	for face in faces:
 		var currentFace = [] #Array of vertices in current face
 
-		#Check if all vertices of the face are present
-		for v in face:
-			var vertex = voxel + (Vector3(sideLength, sideLength, sideLength) / v)
-			if vertex in vertices:
-				currentFace.append( vertices.bsearch(vertex) )
+		#Check if the voxel exists
+		if !(voxel + ((face[0] + face[1] + face[2] + face[3]).normalized() * sideLength) in voxels):
+			#Check if all vertices of the face are present
+			for v in face:
+				var vertex = voxel + (Vector3(sideLength, sideLength, sideLength) / v)
+				if vertex in vertices:
+					currentFace.append( vertices.bsearch(vertex) )
 
-		if currentFace.size() == 4:
-			filledFaces.append(currentFace)
+			if currentFace.size() == 4:
+				filledFaces.append(currentFace)
 
 	return filledFaces
