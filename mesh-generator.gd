@@ -2,20 +2,40 @@ tool
 extends Spatial
 
 export(Material) var mat
-export var voxels = [Vector3(1, 2, 1), Vector3(1, 1, 2)]
 export(Vector3) var maxSize = Vector3(10, 10, 10)
 export(float) var sideLength = 1.0
+export(float) var threshold = 0.05
 
 var vertices = []
 var faces = []
+var voxels = [Vector3(1, 2, 1), Vector3(1, 1, 2)]
 
 func _ready():
+	generateVoxels()
 	generateMesh()
+	$GIProbe.bake()
 
-func generateMesh():
+
+func generateVoxels():
+	voxels = [] #Clear voxels
+
+	var noise = OpenSimplexNoise.new()
+	noise.seed = randi()
+	noise.octaves = 1
+	noise.period = 5.0
+	noise.persistence = 0.8
+
 	for x in range(maxSize.x):
 		for y in range(maxSize.y):
 			for z in range(maxSize.z):
+				if noise.get_noise_3d(x, y, z) < threshold:
+					voxels.append( Vector3(x, y, z) )
+
+
+func generateMesh():
+	for x in range(-1, maxSize.x):
+		for y in range(-1, maxSize.y):
+			for z in range(-1, maxSize.z):
 				#Generate vertices
 				if signChange( Vector3(x, y, z) ):
 					var vert = Vector3(x + sideLength/2, y + sideLength/2, z + sideLength/2)
