@@ -6,5 +6,6 @@
 background_mode = 1
 background_sky = SubResource( 1 )
 background_color = Color( 0.752941, 0.752941, 0.752941, 1 )
+ambient_light_color = Color( 0.635294, 0.635294, 0.635294, 1 )
 tonemap_mode = 2
 

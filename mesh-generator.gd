@@ -1,3 +1,4 @@
+tool
 extends Spatial
 
 export(Material) var mat

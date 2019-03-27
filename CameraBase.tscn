@@ -9,7 +9,7 @@ maxZoom = 0.23
 [node name="Base" type="Spatial" parent="."]
 
 [node name="Camera" type="Camera" parent="Base"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4.42197 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 9 )
 
 [node name="DirectionalLight" type="DirectionalLight" parent="Base"]
 transform = Transform( 0.837742, -0.156258, 0.523232, -0.0844011, 0.909618, 0.406782, -0.539504, -0.38494, 0.748837, 2.08711, 1.33797, 2.31266 )
