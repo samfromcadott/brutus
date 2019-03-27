@@ -1,0 +1,23 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Camera.gd" type="Script" id=1]
+
+[node name="CameraBase" type="Spatial"]
+script = ExtResource( 1 )
+maxZoom = 0.23
+
+[node name="Base" type="Spatial" parent="."]
+
+[node name="Camera" type="Camera" parent="Base"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4.42197 )
+
+[node name="DirectionalLight" type="DirectionalLight" parent="Base"]
+transform = Transform( 0.837742, -0.156258, 0.523232, -0.0844011, 0.909618, 0.406782, -0.539504, -0.38494, 0.748837, 2.08711, 1.33797, 2.31266 )
+light_color = Color( 0.820313, 0.856812, 1, 1 )
+
+[node name="OmniLight" type="OmniLight" parent="Base"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2.59439, -0.462219, 1.67285 )
+light_color = Color( 1, 0.753906, 0.753906, 1 )
+light_energy = 0.4
+omni_range = 3.48876
+

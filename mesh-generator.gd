@@ -28,6 +28,23 @@ func generateMesh():
 			print('f ' + str(face[0] + 1) + ' ' + str(face[1] + 1) + ' ' + str(face[2] + 1) + ' ' + str(face[3] + 1))
 			faces.append(face)
 
+	#Generate Mesh
+	var tmpMesh = Mesh.new()
+	var surface = SurfaceTool.new()
+	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
+	surface.set_material(mat)
+
+	for face in faces:
+		var fan = PoolVector3Array()
+
+		for vertex in face:
+			fan.append( vertices[vertex] )
+
+		surface.add_triangle_fan(fan)
+
+	surface.generate_normals()
+	surface.commit(tmpMesh)
+	$MeshInstance.mesh = tmpMesh
 
 	print('#', vertices.size(), " vertices created.")
 	print('#', faces.size(), " faces created.")
@@ -54,10 +71,10 @@ func makeFaces(voxel):
 	var faces = [
 		[Vector3(2, 2, 2), Vector3(2, -2, 2), Vector3(-2, -2, 2), Vector3(-2, 2, 2)],
 		[Vector3(2, 2, 2), Vector3(2, 2, -2), Vector3(2, -2, -2), Vector3(2, -2, 2),],
-		[Vector3(2, 2, 2), Vector3(2, 2, -2), Vector3(-2, 2, -2), Vector3(-2, 2, 2)],
+		[Vector3(-2, 2, 2), Vector3(-2, 2, -2), Vector3(2, 2, -2), Vector3(2, 2, 2)],
 		[Vector3(2, 2, -2), Vector3(-2, 2, -2), Vector3(-2, -2, -2), Vector3(2, -2, -2)],
-		[Vector3(-2, -2, 2), Vector3(-2, 2, 2), Vector3(-2, 2, -2), Vector3(-2, -2, -2)],
-		[Vector3(2, -2, 2), Vector3(-2, -2, 2), Vector3(-2, -2, -2), Vector3(2, -2, -2)]
+		[Vector3(-2, -2, -2), Vector3(-2, 2, -2), Vector3(-2, 2, 2), Vector3(-2, -2, 2)],
+		[Vector3(2, -2, -2), Vector3(-2, -2, -2), Vector3(-2, -2, 2), Vector3(2, -2, 2)]
 	]
 
 	for face in faces:
