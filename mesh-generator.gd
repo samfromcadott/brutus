@@ -22,7 +22,7 @@ func generateVoxels():
 	var noise = OpenSimplexNoise.new()
 	noise.seed = randi()
 	noise.octaves = 1
-	noise.period = 5.0
+	noise.period = 2.0
 	noise.persistence = 0.8
 
 	for x in range(maxSize.x):
