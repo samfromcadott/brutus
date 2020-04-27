@@ -5,10 +5,12 @@ export(Material) var mat
 export(Vector3) var maxSize = Vector3(10, 10, 10)
 export(float) var sideLength = 1.0
 export(float) var threshold = 0.05
+export(float) var surfaceLevel = 0.5
 
 var vertices = []
 var faces = []
-var voxels = [Vector3(1, 2, 1), Vector3(1, 1, 2)]
+# var voxels = [Vector3(1, 2, 1), Vector3(1, 1, 2)]
+var voxels
 
 func _ready():
 	generateVoxels()
@@ -25,11 +27,20 @@ func generateVoxels():
 	noise.period = 2.0
 	noise.persistence = 0.8
 
+	# for x in range(maxSize.x):
+	# 	for y in range(maxSize.y):
+	# 		for z in range(maxSize.z):
+	# 			if noise.get_noise_3d(x, y, z) < threshold:
+	# 				voxels.append( Vector3(x, y, z) )
+
 	for x in range(maxSize.x):
+		voxels.append([])
+
 		for y in range(maxSize.y):
+			voxels[x].append([])
+
 			for z in range(maxSize.z):
-				if noise.get_noise_3d(x, y, z) < threshold:
-					voxels.append( Vector3(x, y, z) )
+				voxels[x][y].append( noise.get_noise_3d(x, y, z) )
 
 
 func generateMesh():
@@ -113,3 +124,18 @@ func makeFaces(voxel):
 				filledFaces.append(currentFace)
 
 	return filledFaces
+
+
+func addVoxel(location, voxel):
+	var faces = [
+		[Vector3(2, 2, 2), Vector3(2, -2, 2), Vector3(-2, -2, 2), Vector3(-2, 2, 2)],
+		[Vector3(2, 2, 2), Vector3(2, 2, -2), Vector3(2, -2, -2), Vector3(2, -2, 2),],
+		[Vector3(-2, 2, 2), Vector3(-2, 2, -2), Vector3(2, 2, -2), Vector3(2, 2, 2)],
+		[Vector3(2, 2, -2), Vector3(-2, 2, -2), Vector3(-2, -2, -2), Vector3(2, -2, -2)],
+		[Vector3(-2, -2, -2), Vector3(-2, 2, -2), Vector3(-2, 2, 2), Vector3(-2, -2, 2)],
+		[Vector3(2, -2, -2), Vector3(-2, -2, -2), Vector3(-2, -2, 2), Vector3(2, -2, 2)]
+	]
+
+	# for face in faces:
+	# 	#Check if a voxel is adjacent to the one that will be added
+	# 	if !(voxel + ((face[0] + face[1] + face[2] + face[3]).normalized() * sideLength) in voxels):

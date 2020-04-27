@@ -37,6 +37,8 @@ propagation = 0.7
 [node name="Spatial" type="Spatial"]
 script = ExtResource( 1 )
 mat = SubResource( 1 )
+maxSize = null
+sideLength = null
 threshold = 0.01
 
 [node name="MeshInstance" type="MeshInstance" parent="."]
