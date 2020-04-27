@@ -7,7 +7,7 @@ private:
 	Node* child;
 	int value; //Used to determine vertex location
 	void* data; //Optional aditional data
-	unsigned short level; //Level of the node in the tree
+	unsigned char level; //Level of the node in the tree
 	int center[3]; //Location of the node
 
 public:
