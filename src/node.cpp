@@ -19,6 +19,19 @@ void Node::subdivide() {
 
 }
 
+Node* Node::root() {
+	//Returns the root node of this octree
+	Node* n = parent;
+
+	//Move up the tree while the parent is not null
+	while (n) {
+		n = n->parent;
+	}
+
+	return n;
+
+}
+
 unsigned int Node::width() {
 	//Returns the width of the node relative to the width of the root node
 	return 0;

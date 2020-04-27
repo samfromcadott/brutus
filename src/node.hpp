@@ -18,6 +18,8 @@ public:
 
 	void collapse(); //Removes all child nodes
 
+	Node* root(); //Gets the root of the node structure
+
 	unsigned int width(); //Returns the spatial width of the node
 
 };
