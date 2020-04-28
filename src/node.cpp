@@ -10,10 +10,8 @@ Node::~Node() {
 }
 
 void Node::subdivide() {
-	child = new Node[8];
-
 	for (int i = 0; i < 8; i++) {
-		child[i].parent = this;
+		child[i] = new Node;
 	}
 
 }

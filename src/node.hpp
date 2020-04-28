@@ -4,7 +4,7 @@
 class Node {
 private:
 	Node* parent;
-	Node* child;
+	Node* child[8];
 	int value; //Used to determine vertex location
 	void* data; //Optional aditional data
 	float width; //Spatial width of the node
