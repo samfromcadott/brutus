@@ -11,7 +11,7 @@ private:
 	float center[3]; //Location of the node
 
 public:
-	Node ();
+	Node (Node* parent, int value, float width, float* center);
 	virtual ~Node ();
 
 	void subdivide(); //Subdivides the node into 8 child nodes
