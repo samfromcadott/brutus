@@ -7,8 +7,8 @@ private:
 	Node* child;
 	int value; //Used to determine vertex location
 	void* data; //Optional aditional data
-	int width; //Spatial width of the node
-	int center[3]; //Location of the node
+	float width; //Spatial width of the node
+	float center[3]; //Location of the node
 
 public:
 	Node ();
