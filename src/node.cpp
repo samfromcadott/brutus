@@ -14,9 +14,16 @@ Node::~Node() {
 
 }
 
+Node* &Node::operator[](int i) {
+	return branch->leaf[i];
+
+}
+
 void Node::subdivide() {
-	for (int i = 0; i < 8; i++) {
-		child[i] = new Node(this, value, width/2, center);
+	branch = new Branch;
+
+	for (int i = 0; i < SUBDIVS; i++) {
+		branch->leaf[i] = new Node(this, value, width/2, center);
 	}
 
 }
