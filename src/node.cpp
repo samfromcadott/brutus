@@ -1,4 +1,6 @@
 #include "node.hpp"
+#include <cstdarg>
+#include <cassert>
 
 Node::Node(Node* parent, int value, float width, float center[3]) {
 	this->parent = parent;
@@ -14,7 +16,17 @@ Node::~Node() {
 
 }
 
-Node* &Node::operator[](int i) {
+Node* &Node::operator()(int c...) {
+	va_list args;
+	va_start(args, f);
+
+	Node* n = this;
+	for (int i = 0; i < count; i++) {
+		int x = va_arg(args, int); // Index of the next child node
+		assert(x >= 0 && x <= 7);
+		assert(n->branch != NULL);
+		n = n->brach->leaf[x]
+	}
 	return branch->leaf[i];
 
 }

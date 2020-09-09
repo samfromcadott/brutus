@@ -2,16 +2,16 @@
 #define NODE_HPP
 #define SUBDIVS 8
 
-typedef unsigned int LocCode;
+typedef unsigned int NodeID;
 
 class Node {
 public:
-	LocCode locCode;
+	NodeID id;
 
-	Node (LocCode locCode);
+	Node (NodeID id);
 	virtual ~Node ();
 
-	LocCode parent();
+	NodeID parent();
 
 };
 
@@ -23,10 +23,13 @@ public:
 
 };
 
-class Vertex : public Node {
+template <class V>
+class Vertex {
 public:
-	float location[3];
-	float normal[3];
+	V engineVertex; // A refernece to the engine's vertex class
+
+	void setLoc(float x, float y, float z);
+	void setNormal(float x, float y, float z);
 
 };
 
