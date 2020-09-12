@@ -1,25 +1,21 @@
 #include <cstddef>
 #include <iostream>
-#include "node.hpp"
+#include "voxel.hpp"
+#include "vertex.hpp"
+#include "octree.hpp"
 
 int main() {
-	float c[] = {0.0, 0.0, 0.0};
-	Node root(NULL, 1, 1.0, c);
+	Octree graph;
+	graph({}).value = 2.0;
+	graph.subdivide({});
+	graph({1}).value = -5.0;
 
-	std::cout << "Size of short: " << sizeof(short) << '\n';
-	std::cout << "Size of int: " << sizeof(int) << '\n';
-	std::cout << "Size of Node: " << sizeof(Node) << '\n';
-	root.subdivide();
+	graph.subdivide({0});
+	graph({0, 2}).value = 6.0;
 
-	std::cout << "Level of root node: " << root.level() << '\n';
-	// std::cout << "Level of its children: " << root[1]->level() << '\n';
-	// root[1]->value = 5;
-	// std::cout << "Value of root[1]: " << root[1]->value << '\n';
-	// root[1]->subdivide();
-	// std::cout << "Level of its children: " << *(root[1])[0]->level() << '\n';
-	// std::cout << "Level of the parent of its children: " << root.child[1]->root()->level() << '\n';
-	// root.child[1]->subdivide();
-	// std::cout << "Another level deep: " << root.child[1]->child[0]->level() << '\n';
+	std::cout << graph({}).value << '\n';
+	std::cout << graph({1}).value << '\n';
+	std::cout << graph({0, 2}).value << '\n';
 
 	return 0;
 }

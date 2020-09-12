@@ -3,15 +3,18 @@
 
 typedef unsigned int NodeID;
 
-template <class T>
+// template <typename T>
 class Voxel {
 public:
 	NodeID id;
 	float value;
-	T data;
+	void* data;
 
-	Node (NodeID id);
-	virtual ~Node ();
+	Voxel (NodeID id) {
+		this->id = id;
+
+	}
+	virtual ~Voxel () {}
 
 	NodeID parent();
 
