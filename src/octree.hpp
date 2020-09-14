@@ -3,6 +3,7 @@
 
 #include <unordered_map>
 #include <vector>
+#include <array>
 #include "voxel.hpp"
 #include "vertex.hpp"
 
@@ -11,13 +12,14 @@ private:
 	std::unordered_map< NodeID, Voxel > voxels;
 
 public:
-	NodeID getNodeID(std::vector<int> voxel);
+	NodeID getNodeID(NodeAddress voxel);
 
-	Voxel& operator()(std::vector<int> voxel);
-	Voxel operator()(std::vector<int> voxel) const;
+	Voxel& operator()(NodeAddress voxel);
 
-	void subdivide(std::vector<int> voxel);
-	void collapse(std::vector<int> voxel);
+	void subdivide(NodeAddress voxel);
+	void collapse(NodeAddress voxel);
+	NodeID parent(NodeAddress voxel); // Returns the parent of voxel
+	std::array<NodeID, 8> children(NodeAddress voxel); // Returns the children of voxel
 
 	Octree ();
 	virtual ~Octree ();
