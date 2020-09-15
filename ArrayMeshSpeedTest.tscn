@@ -1,0 +1,107 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://CameraBase.tscn" type="PackedScene" id=1]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends MeshInstance
+
+var vertices = []
+var normals = PoolVector3Array()
+var indices = PoolIntArray()
+var arr_mesh
+var arrays = []
+var t # Time since game started
+
+export var period = 2.0
+export var amplitude = 1.0
+export var gridScale = 5.0
+export var resolution = 30
+export var speed = 0.01
+
+var gridMat = preload('res://orange-grid.tres')
+
+func _ready():
+	# Initialize the ArrayMesh.
+	arr_mesh = ArrayMesh.new()
+
+
+func _process(delta):
+	vertices = []
+	normals = PoolVector3Array([])
+	indices = PoolIntArray([])
+	arrays = []
+
+	t = OS.get_ticks_msec()
+	for i in range(0, resolution):
+		for j in range(0, resolution):
+			var x = (-gridScale/2) + i*float(gridScale/resolution)
+			var z = (-gridScale/2) + j*float(gridScale/resolution)
+			makeSquare(x, z, float(gridScale/resolution))
+
+	arrays.resize(ArrayMesh.ARRAY_MAX)
+	arrays[ArrayMesh.ARRAY_VERTEX] = vertices
+	arrays[ArrayMesh.ARRAY_NORMAL] = normals
+	arrays[ArrayMesh.ARRAY_INDEX] = indices
+	# Create the Mesh.
+	arr_mesh.surface_remove(0)
+	arr_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+	mesh = arr_mesh
+	mesh.surface_set_material(0, gridMat)
+
+func height(x, y):
+	return (sin(x*period) * cos(y*period)) * sin(t*speed) * amplitude
+
+func makeSquare(x, z, size):
+	vertices.push_back(Vector3(x,		height(x,		z),			z))
+	vertices.push_back(Vector3(x+size,	height(x+size,	z),			z))
+	vertices.push_back(Vector3(x+size,	height(x+size,	z+size),	z+size))
+	vertices.push_back(Vector3(x,		height(x,		z+size),	z+size))
+
+	normals.push_back(Vector3(0, 1, 0))
+	normals.push_back(Vector3(0, 1, 0))
+	normals.push_back(Vector3(0, 1, 0))
+	normals.push_back(Vector3(0, 1, 0))
+
+	indices.push_back(vertices.size() - 4)
+	indices.push_back(vertices.size() - 3)
+	indices.push_back(vertices.size() - 2)
+
+	indices.push_back(vertices.size() - 4)
+	indices.push_back(vertices.size() - 2)
+	indices.push_back(vertices.size() - 1)
+"
+
+[sub_resource type="GDScript" id=2]
+script/source = "extends Label
+
+func _process(delta):
+	text = str(Engine.get_frames_per_second())
+"
+
+[node name="Spatial" type="Spatial"]
+
+[node name="CameraBase" parent="." instance=ExtResource( 1 )]
+maxZoom = 0.5
+
+[node name="Mesh" type="MeshInstance" parent="."]
+script = SubResource( 1 )
+period = 0.5
+amplitude = 1.5
+gridScale = 5.0
+resolution = 1
+
+[node name="Control" type="Control" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Control"]
+margin_right = 40.0
+margin_bottom = 14.0
+text = "FPS"
+script = SubResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}

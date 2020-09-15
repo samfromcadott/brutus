@@ -12,4 +12,3 @@ ssao_enabled = true
 ssao_radius = 1.4
 ssao_radius2 = 1.4
 ssao_quality = 2
-
