@@ -20,6 +20,7 @@ public:
 	virtual ~Voxel () {}
 
 	NodeID parent();
+	float weight();
 
 };
 
