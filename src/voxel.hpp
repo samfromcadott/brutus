@@ -1,27 +1,25 @@
 #ifndef VOXEL_HPP
 #define VOXEL_HPP
 
-#include <vector>
+// class Voxel {
+// public:
+// 	int value;
+// 	void* data;
+//
+// 	Voxel (NodeID id) {
+// 		this->id = id;
+//
+// 	}
+//
+// };
 
-typedef unsigned int NodeID;
-typedef std::vector<int> NodeAddress;
+namespace Brutus {
+	struct Voxel {
+		int value;
+		void* data;
 
-// template <typename T>
-class Voxel {
-public:
-	NodeID id;
-	float value;
-	void* data;
+	};
 
-	Voxel (NodeID id) {
-		this->id = id;
-
-	}
-	virtual ~Voxel () {}
-
-	NodeID parent();
-	float weight();
-
-};
+}
 
 #endif

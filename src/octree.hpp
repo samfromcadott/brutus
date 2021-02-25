@@ -7,6 +7,9 @@
 #include "voxel.hpp"
 #include "vertex.hpp"
 
+typedef unsigned int NodeID;
+typedef std::vector<int> NodeAddress;
+
 class Octree {
 private:
 	std::unordered_map< NodeID, Voxel > voxels;
