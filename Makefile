@@ -1,7 +1,7 @@
 CXX = g++
 
 build:
-	$(CXX) -c src/grid.cpp -o bin/grid.o
+	$(CXX) src/grid.cpp tests/test.cpp -o bin/objtest
 
 clean:
 	del *.exe

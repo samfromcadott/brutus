@@ -7,15 +7,10 @@
 
 namespace Brutus {
 
-	class Mesh {
-	private:
+	struct Mesh {
 		std::vector<Vertex> vertex;
 		std::vector<Vertex> normal;
 		std::vector<Face> face;
-
-	public:
-		Mesh();
-		~Mesh();
 
 	};
 
