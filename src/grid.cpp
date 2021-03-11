@@ -1,5 +1,7 @@
 #include "grid.hpp"
 #include "voxel.hpp"
+#include "vertex.hpp"
+#include "face.hpp"
 
 Brutus::Grid::Grid(unsigned int sizeX, unsigned int sizeY, unsigned int sizeZ) {
 	this->sizeX = sizeX;
@@ -45,6 +47,26 @@ Brutus::Mesh Brutus::Grid::generateMesh() {
 		Vertex v111 = getVertexDelta(x  , y  , z  );
 
 		// If an adjacent voxel value is >0 there should be faces
+		int dir[] = {
+			0,0,-1,
+			0,0,+1,
+			0,-1,0,
+			0,+1,0,
+			-1,0,0,
+			+1,0,0
+		};
+		for (int i=0; i < 18; i+=3)
+		if (voxelInGrid(x+dir[i], y+dir[i+1], z+dir[i+2]) && getVoxel(x+dir[i], y+dir[i+1], z+dir[i+2]).value > 0)
+			addFace(dir[i], dir[i+1], dir[i+2], m);
+		// if (voxelInGrid(x, y, z+1) && getVoxel(x, y, z+1).value > 0) {
+		// 	m.face.push_back(Face(m.vertex.size()+7, 0, m.vertex.size()+1, 0, m.vertex.size()+3, 0));
+		// 	m.face.push_back(Face(m.vertex.size()+7, 0, m.vertex.size()+5, 0, m.vertex.size()+1, 0));
+		// }
+		//
+		// if (voxelInGrid(x, y, z-1) && getVoxel(x, y, z-1).value > 0) {
+		// 	m.face.push_back(Face(m.vertex.size()+6, 0, m.vertex.size()+4, 0, m.vertex.size()+0, 0));
+		// 	m.face.push_back(Face(m.vertex.size()+6, 0, m.vertex.size()+0, 0, m.vertex.size()+2, 0));
+		// }
 
 		// Append new face data to the mesh
 		m.vertex.push_back(v000);
@@ -99,7 +121,8 @@ Brutus::Vertex Brutus::Grid::getVertexDelta(int voxX, int voxY, int voxZ) {
 
 	}
 
-	return Vertex(avgX*voxX+0.5, avgY*voxY+0.5, avgZ*voxZ+0.5);
+	// return Vertex(avgX+voxX, avgY+voxY, avgZ+voxZ);
+	return Vertex(voxX+0.5, voxY+0.5, voxZ+0.5);
 
 }
 
@@ -125,5 +148,29 @@ bool Brutus::Grid::voxelInGrid(int x, int y, int z) {
 	bool yIn = y >= 0 && y < sizeY;
 	bool zIn = z >= 0 && z < sizeZ;
 	return xIn && yIn && zIn;
+
+}
+
+void Brutus::Grid::addFace(int x, int y, int z, Mesh& m) {
+	// Adds a face if voxel xyz and the voxel in the direction (dx, dy, dz) have opposite signs
+	if (x == 0 && y == 0 && z == 1) {
+		m.face.push_back(Face(m.vertex.size()+7, 0, m.vertex.size()+1, 0, m.vertex.size()+3, 0));
+		m.face.push_back(Face(m.vertex.size()+7, 0, m.vertex.size()+5, 0, m.vertex.size()+1, 0));
+	} else if (x == 0 && y == 0 && z == -1) {
+		m.face.push_back(Face(m.vertex.size()+6, 0, m.vertex.size()+4, 0, m.vertex.size()+0, 0));
+		m.face.push_back(Face(m.vertex.size()+6, 0, m.vertex.size()+0, 0, m.vertex.size()+2, 0));
+	} else if (x == 0 && y == -1 && z == 0) {
+		m.face.push_back(Face(m.vertex.size()+0, 0, m.vertex.size()+1, 0, m.vertex.size()+4, 0));
+		m.face.push_back(Face(m.vertex.size()+4, 0, m.vertex.size()+1, 0, m.vertex.size()+5, 0));
+	} else if (x == 0 && y == 1 && z == 0) {
+		m.face.push_back(Face(m.vertex.size()+7, 0, m.vertex.size()+3, 0, m.vertex.size()+6, 0));
+		m.face.push_back(Face(m.vertex.size()+3, 0, m.vertex.size()+2, 0, m.vertex.size()+6, 0));
+	} else if (x == -1 && y == 0 && z == 0) {
+		m.face.push_back(Face(m.vertex.size()+0, 0, m.vertex.size()+2, 0, m.vertex.size()+1, 0));
+		m.face.push_back(Face(m.vertex.size()+2, 0, m.vertex.size()+3, 0, m.vertex.size()+1, 0));
+	} else if (x == 1 && y == 0 && z == 0) {
+		m.face.push_back(Face(m.vertex.size()+5, 0, m.vertex.size()+7, 0, m.vertex.size()+4, 0));
+		m.face.push_back(Face(m.vertex.size()+7, 0, m.vertex.size()+6, 0, m.vertex.size()+4, 0));
+	}
 
 }

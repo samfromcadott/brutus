@@ -16,6 +16,7 @@ namespace Brutus {
 		Vertex getVertexDelta(int voxX, int voxY, int voxZ);
 		bool voxelInGrid(int x, int y, int z);
 		void lerp(int x0, int y0, int z0, int x1, int y1, int z1, float& n, int& d);
+		void addFace(int x, int y, int z, Mesh& m);
 
 	public:
 		unsigned int sizeX, sizeY, sizeZ;
