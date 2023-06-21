@@ -1,3 +1,7 @@
 *.exe
 bin/
 *.obj
+test
+.sconsign.dblite
+build
+*.o
