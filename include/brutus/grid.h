@@ -10,6 +10,7 @@ public:
 	Grid(size_t size_x, size_t size_y, size_t size_z);
 	~Grid();
 
+	Grid& operator=(Grid other);
 	Chunk& operator()(const size_t x, const size_t y, const size_t z); // Setter
 	Chunk operator()(const size_t x, const size_t y, const size_t z) const; // Getter
 
@@ -34,6 +35,19 @@ inline Grid::Grid(size_t size_x, size_t size_y, size_t size_z) {
 
 inline Grid::~Grid() {
 	if (data != nullptr) delete[] data;
+}
+
+inline Grid& Grid::operator=(Grid other) {
+	if (data != nullptr) delete[] data;
+
+	this->data = other.data;
+	this->size_x = other.size_x;
+	this->size_y = other.size_y;
+	this->size_z = other.size_z;
+
+	other.data = nullptr;
+
+	return *this;
 }
 
 inline Chunk& Grid::operator()(const size_t x, const size_t y, const size_t z) {
