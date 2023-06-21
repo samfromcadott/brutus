@@ -1,5 +1,13 @@
 class Grid {
 private:
+	typedef uint8_t Case; // Bitfield that stores which voxel in a set are below threshold
+	struct EdgeFace { // Defines faces by the edges of the cube the vertices touch
+		int8_t v0, v1, v2;
+	};
+
+	// Include the lookup tables used for mesh generation
+	#include "lut.h"
+
 	size_t size_x, size_y, size_z;
 	Chunk* data = nullptr; // Array of Chunk
 
