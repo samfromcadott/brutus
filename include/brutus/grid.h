@@ -1,7 +1,7 @@
 class Grid {
 private:
 	size_t size_x, size_y, size_z;
-	Chunk* data; // Array of Chunk
+	Chunk* data = nullptr; // Array of Chunk
 
 	size_t index(const size_t x, const size_t y, const size_t z) const; // Returns the index of a coordinate
 
@@ -33,9 +33,8 @@ inline Grid::Grid(size_t size_x, size_t size_y, size_t size_z) {
 }
 
 inline Grid::~Grid() {
-	delete[] data;
+	if (data != nullptr) delete[] data;
 }
-
 
 inline Chunk& Grid::operator()(const size_t x, const size_t y, const size_t z) {
 	return data[ index(x,y,z) ];
