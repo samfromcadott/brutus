@@ -11,13 +11,13 @@ class Chunk;
 struct Voxel;
 
 struct Mesh {
-	float* vertices;
-	float* normals;
-	float* tex_coords;
+	float* vertices = nullptr;
+	float* normals = nullptr;
+	float* tex_coords = nullptr;
 
-	unsigned short *indices;
+	unsigned short *indices = nullptr;
 
-	size_t vertex_count, face_count;
+	size_t vertex_count = 0, face_count = 0;
 };
 
 #include "voxel.h"
