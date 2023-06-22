@@ -3,6 +3,7 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <iostream>
 
 namespace Brutus {
 
@@ -25,6 +26,14 @@ struct Mesh {
 		if (tex_coords != nullptr) delete[] tex_coords;
 		if (indices != nullptr) delete[] indices;
 	}
+};
+
+struct vec3f {
+	float x, y, z;
+};
+
+struct vec3i {
+	int x, y, z;
 };
 
 #include "voxel.h"

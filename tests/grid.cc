@@ -17,3 +17,17 @@ TEST_CASE("Access chunk") {
 	CHECK(chunk(1,1,1).weight == 2);
 	CHECK(chunk(1,1,2).weight == 0);
 }
+
+TEST_CASE("Generate mesh") {
+	Brutus::Grid grid(1, 1, 1);
+	Brutus::Mesh mesh = grid.generate_mesh(0, 0, 0);
+
+	std::cout << "Generating obj file for mesh" << '\n';
+	std::cout << mesh.vertex_count << '\n';
+	for (size_t i = 0; i < mesh.vertex_count * 3; i+=3) {
+		std::cout << "v "
+		<< mesh.vertices[i] << " "
+		<< mesh.vertices[i+1] << " "
+		<< mesh.vertices[i+2] << '\n';
+	}
+}
