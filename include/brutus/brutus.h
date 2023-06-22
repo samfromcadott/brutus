@@ -3,7 +3,6 @@
 
 #include <cstddef>
 #include <cstdint>
-#include <iostream>
 
 namespace Brutus {
 
