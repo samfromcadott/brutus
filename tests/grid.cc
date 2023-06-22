@@ -23,12 +23,12 @@ TEST_CASE("Generate mesh") {
 	Brutus::Grid grid(1, 1, 1);
 
 	// Create a sphere
-	float radius = 4.0f;
+	float radius = 3.0f;
 
-	for (size_t x = 0; x < Brutus::Chunk::size - 1; x++)
-	for (size_t y = 0; y < Brutus::Chunk::size - 1; y++)
-	for (size_t z = 0; z < Brutus::Chunk::size - 1; z++) {
-		float weight = sqrt( pow(3.0 - x, 2) + pow(3.0 - y, 2) + pow(3.0 - z, 2) ) - radius;
+	for (size_t x = 0; x < Brutus::Chunk::size; x++)
+	for (size_t y = 0; y < Brutus::Chunk::size; y++)
+	for (size_t z = 0; z < Brutus::Chunk::size; z++) {
+		float weight = sqrt( pow(3.5-x, 2) + pow(3.5-y, 2) + pow(3.5-z, 2) ) - radius;
 		grid(0,0,0)(x,y,z).weight = Brutus::VoxelWeight(weight);
 	}
 
