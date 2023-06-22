@@ -4,6 +4,8 @@
 
 class Chunk {
 private:
+	friend class Grid;
+
 	Voxel data[BRUTUS_CHUNK_SIZE * BRUTUS_CHUNK_SIZE * BRUTUS_CHUNK_SIZE]; // Array of Voxel
 
 	size_t index(const size_t x, const size_t y, const size_t z) const { // Returns the index of a coordinate
