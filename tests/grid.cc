@@ -1,5 +1,6 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include <doctest.h>
+#include <fstream>
 
 #include <brutus/brutus.h>
 
@@ -20,14 +21,35 @@ TEST_CASE("Access chunk") {
 
 TEST_CASE("Generate mesh") {
 	Brutus::Grid grid(1, 1, 1);
+
+	// Create a sphere
+	float radius = 4.0f;
+
+	for (size_t x = 0; x < Brutus::Chunk::size - 1; x++)
+	for (size_t y = 0; y < Brutus::Chunk::size - 1; y++)
+	for (size_t z = 0; z < Brutus::Chunk::size - 1; z++) {
+		float weight = sqrt( pow(3.0 - x, 2) + pow(3.0 - y, 2) + pow(3.0 - z, 2) ) - radius;
+		grid(0,0,0)(x,y,z).weight = Brutus::VoxelWeight(weight);
+	}
+
 	Brutus::Mesh mesh = grid.generate_mesh(0, 0, 0);
 
 	std::cout << "Generating obj file for mesh" << '\n';
-	std::cout << mesh.vertex_count << '\n';
+	std::cout << "Face count: " << mesh.face_count << '\n';
+	std::ofstream model_file;
+	model_file.open("test.obj");
+	model_file << "# Test of the Brutus voxel library\n";
 	for (size_t i = 0; i < mesh.vertex_count * 3; i+=3) {
-		std::cout << "v "
+		model_file << "v "
 		<< mesh.vertices[i] << " "
 		<< mesh.vertices[i+1] << " "
 		<< mesh.vertices[i+2] << '\n';
+	}
+
+	for (size_t i = 0; i < mesh.vertex_count; i+=3) {
+		model_file << "f "
+		<< i+1 << " "
+		<< i+2 << " "
+		<< i+3 << '\n';
 	}
 }

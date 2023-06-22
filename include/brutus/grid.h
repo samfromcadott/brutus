@@ -34,7 +34,28 @@ inline size_t Grid::index(const size_t x, const size_t y, const size_t z) const 
 }
 
 inline Grid::Case Grid::neighborhood_case(vec3i chunk, vec3i voxel) {
-	return 1;
+	Case c = 0;
+
+	VoxelWeight v0 = (*this)(chunk.x, chunk.y, chunk.z)(voxel.x+0, voxel.y+0, voxel.z+0).weight;
+	VoxelWeight v1 = (*this)(chunk.x, chunk.y, chunk.z)(voxel.x+0, voxel.y+0, voxel.z+1).weight;
+	VoxelWeight v2 = (*this)(chunk.x, chunk.y, chunk.z)(voxel.x+1, voxel.y+0, voxel.z+1).weight;
+	VoxelWeight v3 = (*this)(chunk.x, chunk.y, chunk.z)(voxel.x+1, voxel.y+0, voxel.z+0).weight;
+	VoxelWeight v4 = (*this)(chunk.x, chunk.y, chunk.z)(voxel.x+0, voxel.y+1, voxel.z+0).weight;
+	VoxelWeight v5 = (*this)(chunk.x, chunk.y, chunk.z)(voxel.x+0, voxel.y+1, voxel.z+1).weight;
+	VoxelWeight v6 = (*this)(chunk.x, chunk.y, chunk.z)(voxel.x+1, voxel.y+1, voxel.z+1).weight;
+	VoxelWeight v7 = (*this)(chunk.x, chunk.y, chunk.z)(voxel.x+1, voxel.y+1, voxel.z).weight;
+
+	// Set bits for each voxel with a weight below 0
+	if ( v0 < 0 ) c ^= 1 << 0;
+	if ( v1 < 0 ) c ^= 1 << 1;
+	if ( v2 < 0 ) c ^= 1 << 2;
+	if ( v3 < 0 ) c ^= 1 << 3;
+	if ( v4 < 0 ) c ^= 1 << 4;
+	if ( v5 < 0 ) c ^= 1 << 5;
+	if ( v6 < 0 ) c ^= 1 << 6;
+	if ( v7 < 0 ) c ^= 1 << 7;
+
+	return c;
 }
 
 inline void Grid::neighborhood_mesh(Mesh& mesh, vec3i chunk, vec3i voxel) {
@@ -44,7 +65,6 @@ inline void Grid::neighborhood_mesh(Mesh& mesh, vec3i chunk, vec3i voxel) {
 
 	// Determine the number of faces and vertices
 	const size_t face_count = case_face_count[c];
-	const size_t vertex_count = face_count * 3;
 
 	mesh.face_count += face_count;
 
@@ -180,9 +200,9 @@ inline Mesh Grid::generate_mesh(const size_t x, const size_t y, const size_t z) 
 	mesh.vertices = new float[11*8*8*8]();
 
 	// Loop over each neighborhood
-	for (size_t i = 0; i < Chunk::size; i++)
-	for (size_t j = 0; j < Chunk::size; j++)
-	for (size_t k = 0; k < Chunk::size; k++) {
+	for (size_t i = 0; i < Chunk::size - 1; i++)
+	for (size_t j = 0; j < Chunk::size - 1; j++)
+	for (size_t k = 0; k < Chunk::size - 1; k++) {
 		vec3i voxel = {(int)i, (int)j, (int)k};
 		neighborhood_mesh(mesh, chunk, voxel);
 	}
