@@ -27,14 +27,8 @@ struct Mesh {
 	}
 };
 
-struct vec3f {
-	float x, y, z;
-};
 
-struct vec3i {
-	int x, y, z;
-};
-
+#include "vectors.h"
 #include "voxel.h"
 #include "chunk.h"
 #include "grid.h"
