@@ -13,9 +13,11 @@ private:
 	Chunk* data = nullptr; // Array of Chunk
 
 	size_t index(const size_t x, const size_t y, const size_t z) const; // Returns the index of a coordinate
+	vec3f voxel_origin(const vec3i chunk, const vec3i voxel); // Returns the world location of a voxel
 	Case neighborhood_case(vec3i chunk, vec3i voxel); // Determines the case of a neighborhood
 	void neighborhood_mesh(Mesh& mesh, vec3i chunk, vec3i voxel); // Adds triangles to mesh for neighborhood of voxel
 	vec3f vertex_from_edge(vec3i chunk, vec3i voxel, const Edge edge); // Gets vertex position for edge in neighborhood of voxel
+	vec3f point_between_voxels(const vec3i chunk, const vec3i a, const vec3i b); // Finds the 0 point between two opposite sign voxels
 
 public:
 	Grid();
@@ -31,6 +33,14 @@ public:
 
 inline size_t Grid::index(const size_t x, const size_t y, const size_t z) const {
 	return (x * size_y * size_z) + (y * size_z) + z;
+}
+
+inline vec3f Grid::voxel_origin(const vec3i chunk, const vec3i voxel) {
+	return {
+		float(chunk.x * Chunk::size + voxel.x),
+		float(chunk.y * Chunk::size + voxel.y),
+		float(chunk.z * Chunk::size + voxel.z)
+	};
 }
 
 inline Grid::Case Grid::neighborhood_case(vec3i chunk, vec3i voxel) {
@@ -97,63 +107,71 @@ inline void Grid::neighborhood_mesh(Mesh& mesh, vec3i chunk, vec3i voxel) {
 }
 
 inline vec3f Grid::vertex_from_edge(vec3i chunk, vec3i voxel, const Edge edge) {
-	// Get location of voxel
-	vec3f voxel_origin = {
-		float(chunk.x * Chunk::size + voxel.x),
-		float(chunk.y * Chunk::size + voxel.y),
-		float(chunk.z * Chunk::size + voxel.z)
-	};
 	vec3f vertex;
 
 	// Find to surface point of the edge
 	switch (edge) {
 		case 0:
-			vertex = {0.0f, 0.0f, 0.5f};
+			vertex = point_between_voxels(chunk, voxel, voxel + (vec3i){0,0,1});
 			break;
 		case 1:
-			vertex = {0.5f, 0.0f, 1.0f};
+			vertex = point_between_voxels(chunk, voxel + (vec3i){0,0,1}, voxel + (vec3i){1,0,1});
 			break;
 		case 2:
-			vertex = {1.0f, 0.0f, 0.5f};
+			vertex = point_between_voxels(chunk, voxel + (vec3i){1,0,0}, voxel + (vec3i){1,0,1});
 			break;
 		case 3:
-			vertex = {0.5f, 0.0f, 0.0f};
+			vertex = point_between_voxels(chunk, voxel, voxel + (vec3i){1,0,0});
 			break;
 		case 4:
-			vertex = {0.0f, 1.0f, 0.5f};
+			vertex = point_between_voxels(chunk, voxel + (vec3i){0,1,0}, voxel + (vec3i){0,1,1});
 			break;
 		case 5:
-			vertex = {0.5f, 1.0f, 1.0f};
+			vertex = point_between_voxels(chunk, voxel + (vec3i){0,1,1}, voxel + (vec3i){1,1,1});
 			break;
 		case 6:
-			vertex = {1.0f, 1.0f, 0.5f};
+			vertex = point_between_voxels(chunk, voxel + (vec3i){1,1,0}, voxel + (vec3i){1,1,1});
 			break;
 		case 7:
-			vertex = {0.5f, 1.0f, 0.0f};
+			vertex = point_between_voxels(chunk, voxel + (vec3i){0,1,0}, voxel + (vec3i){1,1,0});
 			break;
 		case 8:
-			vertex = {0.0f, 0.5f, 0.0f};
+			vertex = point_between_voxels(chunk, voxel, voxel + (vec3i){0,1,0});
 			break;
 		case 9:
-			vertex = {0.0f, 0.5f, 1.0f};
+			vertex = point_between_voxels(chunk, voxel + (vec3i){0,0,1}, voxel + (vec3i){0,1,1});
 			break;
 		case 10:
-			vertex = {1.0f, 0.5f, 1.0f};
+			vertex = point_between_voxels(chunk, voxel + (vec3i){1,0,1}, voxel + (vec3i){1,1,1});
 			break;
 		case 11:
-			vertex = {1.0f, 0.5f, 0.0f};
+			vertex = point_between_voxels(chunk, voxel + (vec3i){1,0,0}, voxel + (vec3i){1,1,0});
 			break;
 	}
-
-	vertex = {
-		voxel_origin.x + vertex.x,
-		voxel_origin.y + vertex.y,
-		voxel_origin.z + vertex.z
-	};
 
 	return vertex;
 }
 
+inline vec3f Grid::point_between_voxels(const vec3i chunk, const vec3i a, const vec3i b) {
+	// Get the weight of both voxels
+	VoxelWeight weight_a = (*this)(chunk.x, chunk.y, chunk.z)(a.x, a.y, a.z).weight;
+	VoxelWeight weight_b = (*this)(chunk.x, chunk.y, chunk.z)(b.x, b.y, b.z).weight;
+
+	// Interpolate between them to find where the surface is
+	// const int x0 = 0;
+	const int x1 = 255;
+	// int x = ( -weight_a * (x1 - x0) ) / (weight_b - weight_a) + x0;
+	int x = ( -weight_a * x1 ) / (weight_b - weight_a);
+
+	// Calculate vertex location
+	vec3f origin_a = voxel_origin(chunk, a);
+	vec3f origin_b = voxel_origin(chunk, b);
+
+	vec3f d = origin_b - origin_a; // Vector from a to b
+	vec3f vertex = origin_a + ( d * ( float(x) / float(x1) ) );
+
+	return vertex;
+}
 
 inline Grid::Grid() {
 
