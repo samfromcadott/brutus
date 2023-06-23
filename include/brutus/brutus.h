@@ -27,7 +27,6 @@ struct Mesh {
 	}
 };
 
-
 #include "vectors.h"
 #include "voxel.h"
 #include "chunk.h"
