@@ -52,13 +52,13 @@ inline Grid::Case Grid::neighborhood_case(vec3i chunk, vec3i voxel) {
 	// Get all the voxel locations
 	vec3i voxels[8] = {
 		voxel,
-		{voxel.x+0, voxel.y+0, voxel.z+1},
-		{voxel.x+1, voxel.y+0, voxel.z+1},
-		{voxel.x+1, voxel.y+0, voxel.z+0},
-		{voxel.x+0, voxel.y+1, voxel.z+0},
-		{voxel.x+0, voxel.y+1, voxel.z+1},
-		{voxel.x+1, voxel.y+1, voxel.z+1},
-		{voxel.x+1, voxel.y+1, voxel.z+0},
+		voxel + (vec3i){0, 0, 1},
+		voxel + (vec3i){1, 0, 1},
+		voxel + (vec3i){1, 0, 0},
+		voxel + (vec3i){0, 1, 0},
+		voxel + (vec3i){0, 1, 1},
+		voxel + (vec3i){1, 1, 1},
+		voxel + (vec3i){1, 1, 0},
 	};
 
 	// Chunks may need to be corrected
