@@ -17,7 +17,8 @@ private:
 	Case neighborhood_case(vec3i chunk, vec3i voxel); // Determines the case of a neighborhood
 	void neighborhood_mesh(Mesh& mesh, vec3i chunk, vec3i voxel); // Adds triangles to mesh for neighborhood of voxel
 	vec3f vertex_from_edge(vec3i chunk, vec3i voxel, const Edge edge); // Gets vertex position for edge in neighborhood of voxel
-	vec3f point_between_voxels(const vec3i chunk, const vec3i a, const vec3i b); // Finds the 0 point between two opposite sign voxels
+	vec3f point_between_voxels(const vec3i chunk, const vec3i a, vec3i b); // Finds the 0 point between two opposite sign voxels
+	void correct_boundry_voxel(vec3i& chunk, vec3i& voxel); // Gets voxel from next chunk
 
 public:
 	Grid();
@@ -46,24 +47,34 @@ inline vec3f Grid::voxel_origin(const vec3i chunk, const vec3i voxel) {
 inline Grid::Case Grid::neighborhood_case(vec3i chunk, vec3i voxel) {
 	Case c = 0;
 
-	VoxelWeight v0 = (*this)(chunk.x, chunk.y, chunk.z)(voxel.x+0, voxel.y+0, voxel.z+0).weight;
-	VoxelWeight v1 = (*this)(chunk.x, chunk.y, chunk.z)(voxel.x+0, voxel.y+0, voxel.z+1).weight;
-	VoxelWeight v2 = (*this)(chunk.x, chunk.y, chunk.z)(voxel.x+1, voxel.y+0, voxel.z+1).weight;
-	VoxelWeight v3 = (*this)(chunk.x, chunk.y, chunk.z)(voxel.x+1, voxel.y+0, voxel.z+0).weight;
-	VoxelWeight v4 = (*this)(chunk.x, chunk.y, chunk.z)(voxel.x+0, voxel.y+1, voxel.z+0).weight;
-	VoxelWeight v5 = (*this)(chunk.x, chunk.y, chunk.z)(voxel.x+0, voxel.y+1, voxel.z+1).weight;
-	VoxelWeight v6 = (*this)(chunk.x, chunk.y, chunk.z)(voxel.x+1, voxel.y+1, voxel.z+1).weight;
-	VoxelWeight v7 = (*this)(chunk.x, chunk.y, chunk.z)(voxel.x+1, voxel.y+1, voxel.z).weight;
+	// Get all the voxel locations
+	vec3i voxels[8] = {
+		voxel,
+		{voxel.x+0, voxel.y+0, voxel.z+1},
+		{voxel.x+1, voxel.y+0, voxel.z+1},
+		{voxel.x+1, voxel.y+0, voxel.z+0},
+		{voxel.x+0, voxel.y+1, voxel.z+0},
+		{voxel.x+0, voxel.y+1, voxel.z+1},
+		{voxel.x+1, voxel.y+1, voxel.z+1},
+		{voxel.x+1, voxel.y+1, voxel.z+0},
+	};
 
-	// Set bits for each voxel with a weight below 0
-	if ( v0 < 0 ) c ^= 1 << 0;
-	if ( v1 < 0 ) c ^= 1 << 1;
-	if ( v2 < 0 ) c ^= 1 << 2;
-	if ( v3 < 0 ) c ^= 1 << 3;
-	if ( v4 < 0 ) c ^= 1 << 4;
-	if ( v5 < 0 ) c ^= 1 << 5;
-	if ( v6 < 0 ) c ^= 1 << 6;
-	if ( v7 < 0 ) c ^= 1 << 7;
+	// Chunks may need to be corrected
+	vec3i chunks[8];
+	for (size_t i = 0; i < 8; i++) chunks[i] = chunk;
+
+	// Correct voxels (voxels[0] never needs to be corrected)
+	for (size_t i = 1; i < 8; i++)
+		correct_boundry_voxel( chunks[i], voxels[i] );
+
+	// Get weights
+	VoxelWeight w[8];
+	for (size_t i = 0; i < 8; i++)
+		w[i] = (*this)(chunks[i].x, chunks[i].y, chunks[i].z)(voxels[i].x, voxels[i].y, voxels[i].z).weight;
+
+	// Set bits for each voxel with a negative weight
+	for (size_t i = 0; i < 8; i++)
+		if ( w[i] < 0 ) c ^= 1 << i;
 
 	return c;
 }
@@ -152,25 +163,44 @@ inline vec3f Grid::vertex_from_edge(vec3i chunk, vec3i voxel, const Edge edge) {
 	return vertex;
 }
 
-inline vec3f Grid::point_between_voxels(const vec3i chunk, const vec3i a, const vec3i b) {
+inline vec3f Grid::point_between_voxels(const vec3i chunk, const vec3i a, vec3i b) {
 	// Get the weight of both voxels
 	VoxelWeight weight_a = (*this)(chunk.x, chunk.y, chunk.z)(a.x, a.y, a.z).weight;
-	VoxelWeight weight_b = (*this)(chunk.x, chunk.y, chunk.z)(b.x, b.y, b.z).weight;
+
+	// Voxel b could be in other chunk
+	vec3i chunk_b = chunk;
+	correct_boundry_voxel(chunk_b, b);
+	VoxelWeight weight_b = (*this)(chunk_b.x, chunk_b.y, chunk_b.z)(b.x, b.y, b.z).weight;
 
 	// Interpolate between them to find where the surface is
-	// const int x0 = 0;
 	const int x1 = 255;
-	// int x = ( -weight_a * (x1 - x0) ) / (weight_b - weight_a) + x0;
 	int x = ( -weight_a * x1 ) / (weight_b - weight_a);
 
 	// Calculate vertex location
 	vec3f origin_a = voxel_origin(chunk, a);
-	vec3f origin_b = voxel_origin(chunk, b);
+	vec3f origin_b = voxel_origin(chunk_b, b);
 
 	vec3f d = origin_b - origin_a; // Vector from a to b
 	vec3f vertex = origin_a + ( d * ( float(x) / float(x1) ) );
 
 	return vertex;
+}
+
+inline void Grid::correct_boundry_voxel(vec3i& chunk, vec3i& voxel) {
+	if (voxel.x == Chunk::size) {
+		chunk.x += 1;
+		voxel.x = 0;
+	}
+
+	if (voxel.y == Chunk::size) {
+		chunk.y += 1;
+		voxel.y = 0;
+	}
+
+	if (voxel.z == Chunk::size) {
+		chunk.z += 1;
+		voxel.z = 0;
+	}
 }
 
 inline Grid::Grid() {
@@ -217,10 +247,17 @@ inline Mesh Grid::generate_mesh(const size_t x, const size_t y, const size_t z) 
 
 	mesh.vertices = new float[11*8*8*8]();
 
+	// For each dimmension go an extra step if there is an adjacent chunk
+	int border_x = x == size_x - 1;
+	int border_y = y == size_y - 1;
+	int border_z = z == size_z - 1;
+
 	// Loop over each neighborhood
-	for (size_t i = 0; i < Chunk::size - 1; i++)
-	for (size_t j = 0; j < Chunk::size - 1; j++)
-	for (size_t k = 0; k < Chunk::size - 1; k++) {
+	for (size_t i = 0; i < Chunk::size - border_x; i++)
+	for (size_t j = 0; j < Chunk::size - border_y; j++)
+	for (size_t k = 0; k < Chunk::size - border_z; k++) {
+		// TODO: if there is an adjacent chunk in a positive direction go up to 8 to
+		// calculate the neighborhood shared by voxels at the boundry of chunks
 		vec3i voxel = {(int)i, (int)j, (int)k};
 		neighborhood_mesh(mesh, chunk, voxel);
 	}
