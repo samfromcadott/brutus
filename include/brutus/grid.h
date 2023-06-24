@@ -17,7 +17,7 @@ private:
 	Case neighborhood_case(vec3i chunk, vec3i voxel); // Determines the case of a neighborhood
 	void neighborhood_mesh(Mesh& mesh, vec3i chunk, vec3i voxel); // Adds triangles to mesh for neighborhood of voxel
 	vec3f vertex_from_edge(vec3i chunk, vec3i voxel, const Edge edge); // Gets vertex position for edge in neighborhood of voxel
-	vec3f point_between_voxels(const vec3i chunk, const vec3i a, vec3i b); // Finds the 0 point between two opposite sign voxels
+	vec3f point_between_voxels(const vec3i chunk, vec3i a, vec3i b); // Finds the 0 point between two opposite sign voxels
 	void correct_boundry_voxel(vec3i& chunk, vec3i& voxel); // Gets voxel from next chunk
 
 public:
@@ -163,13 +163,15 @@ inline vec3f Grid::vertex_from_edge(vec3i chunk, vec3i voxel, const Edge edge) {
 	return vertex;
 }
 
-inline vec3f Grid::point_between_voxels(const vec3i chunk, const vec3i a, vec3i b) {
-	// Get the weight of both voxels
-	VoxelWeight weight_a = (*this)(chunk.x, chunk.y, chunk.z)(a.x, a.y, a.z).weight;
-
-	// Voxel b could be in other chunk
+inline vec3f Grid::point_between_voxels(const vec3i chunk, vec3i a, vec3i b) {
+	// Correct for boundries
+	vec3i chunk_a = chunk;
 	vec3i chunk_b = chunk;
+	correct_boundry_voxel(chunk_a, a);
 	correct_boundry_voxel(chunk_b, b);
+
+	// Get the weight of both voxels
+	VoxelWeight weight_a = (*this)(chunk_a.x, chunk_a.y, chunk_a.z)(a.x, a.y, a.z).weight;
 	VoxelWeight weight_b = (*this)(chunk_b.x, chunk_b.y, chunk_b.z)(b.x, b.y, b.z).weight;
 
 	// Interpolate between them to find where the surface is
@@ -177,7 +179,7 @@ inline vec3f Grid::point_between_voxels(const vec3i chunk, const vec3i a, vec3i 
 	int x = ( -weight_a * x1 ) / (weight_b - weight_a);
 
 	// Calculate vertex location
-	vec3f origin_a = voxel_origin(chunk, a);
+	vec3f origin_a = voxel_origin(chunk_a, a);
 	vec3f origin_b = voxel_origin(chunk_b, b);
 
 	vec3f d = origin_b - origin_a; // Vector from a to b

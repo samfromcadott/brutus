@@ -54,16 +54,23 @@ void write_model(Brutus::Mesh& mesh, std::string filename) {
 }
 
 TEST_CASE("Generate mesh") {
-	Brutus::Grid grid(2, 1, 1);
+	Brutus::Grid grid(2, 2, 2);
 
 	// Create a sphere
 	float radius = 6.0f;
-	generate_sphere(grid(0,0,0), radius, 8, 8, 0);
-	generate_sphere(grid(1,0,0), radius, 0, 8, 0);
+	generate_sphere(grid(0,0,0), radius, 8, 8, 8);
+	generate_sphere(grid(0,0,1), radius, 8, 8, 0);
+	generate_sphere(grid(0,1,0), radius, 8, 0, 8);
+	generate_sphere(grid(0,1,1), radius, 8, 0, 0);
+	generate_sphere(grid(1,0,0), radius, 0, 8, 8);
+	generate_sphere(grid(1,0,1), radius, 0, 8, 0);
+	generate_sphere(grid(1,1,0), radius, 0, 0, 8);
+	generate_sphere(grid(1,1,1), radius, 0, 0, 0);
+
 
 	// Generating the mesh
 	Brutus::Mesh mesh = grid.generate_mesh(0, 0, 0);
-	CHECK(mesh.face_count == 141);
+	CHECK(mesh.face_count == 163);
 
 	// Writing to a file
 	std::cout << "Generating obj file for mesh" << '\n';
@@ -72,4 +79,22 @@ TEST_CASE("Generate mesh") {
 
 	Brutus::Mesh mesh2 = grid.generate_mesh(1, 0, 0);
 	write_model(mesh2, "test2.obj");
+
+	Brutus::Mesh mesh3 = grid.generate_mesh(1, 1, 0);
+	write_model(mesh3, "test3.obj");
+
+	Brutus::Mesh mesh4 = grid.generate_mesh(0, 1, 1);
+	write_model(mesh4, "test4.obj");
+
+	Brutus::Mesh mesh5 = grid.generate_mesh(0, 1, 0);
+	write_model(mesh5, "test5.obj");
+
+	Brutus::Mesh mesh6 = grid.generate_mesh(0, 0, 1);
+	write_model(mesh6, "test6.obj");
+
+	Brutus::Mesh mesh7 = grid.generate_mesh(1, 1, 1);
+	write_model(mesh7, "test7.obj");
+
+	Brutus::Mesh mesh8 = grid.generate_mesh(1, 0, 1);
+	write_model(mesh8, "test8.obj");
 }
