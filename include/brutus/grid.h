@@ -256,8 +256,6 @@ inline Mesh Grid::generate_mesh(const size_t x, const size_t y, const size_t z) 
 	for (size_t i = 0; i < Chunk::size - border_x; i++)
 	for (size_t j = 0; j < Chunk::size - border_y; j++)
 	for (size_t k = 0; k < Chunk::size - border_z; k++) {
-		// TODO: if there is an adjacent chunk in a positive direction go up to 8 to
-		// calculate the neighborhood shared by voxels at the boundry of chunks
 		vec3i voxel = {(int)i, (int)j, (int)k};
 		neighborhood_mesh(mesh, chunk, voxel);
 	}
