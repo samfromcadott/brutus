@@ -28,6 +28,8 @@ public:
 	Grid& operator=(Grid other);
 	Chunk& operator()(const size_t x, const size_t y, const size_t z); // Setter
 	Chunk operator()(const size_t x, const size_t y, const size_t z) const; // Getter
+	Chunk& operator()(const vec3i chunk); // Setter
+	Chunk operator()(const vec3i chunk) const; // Getter
 
 	Mesh generate_mesh(const size_t x, const size_t y, const size_t z); // Generates a mesh for the given chunk
 };
@@ -70,7 +72,7 @@ inline Grid::Case Grid::neighborhood_case(vec3i chunk, vec3i voxel) {
 	// Get weights
 	VoxelWeight w[8];
 	for (size_t i = 0; i < 8; i++)
-		w[i] = (*this)(chunks[i].x, chunks[i].y, chunks[i].z)(voxels[i].x, voxels[i].y, voxels[i].z).weight;
+		w[i] = (*this)(chunks[i])(voxels[i]).weight;
 
 	// Set bits for each voxel with a negative weight
 	for (size_t i = 0; i < 8; i++)
@@ -171,8 +173,8 @@ inline vec3f Grid::point_between_voxels(const vec3i chunk, vec3i a, vec3i b) {
 	correct_boundry_voxel(chunk_b, b);
 
 	// Get the weight of both voxels
-	VoxelWeight weight_a = (*this)(chunk_a.x, chunk_a.y, chunk_a.z)(a.x, a.y, a.z).weight;
-	VoxelWeight weight_b = (*this)(chunk_b.x, chunk_b.y, chunk_b.z)(b.x, b.y, b.z).weight;
+	VoxelWeight weight_a = (*this)(chunk_a)(a).weight;
+	VoxelWeight weight_b = (*this)(chunk_b)(b).weight;
 
 	// Interpolate between them to find where the surface is
 	const int x1 = 255;
@@ -242,6 +244,13 @@ inline Chunk Grid::operator()(const size_t x, const size_t y, const size_t z) co
 	return data[ index(x,y,z) ];
 }
 
+inline Chunk& Grid::operator()(const vec3i chunk) {
+	return (*this)(chunk.x, chunk.y, chunk.z);
+}
+
+inline Chunk Grid::operator()(const vec3i chunk) const {
+	return (*this)(chunk.x, chunk.y, chunk.z);
+}
 
 inline Mesh Grid::generate_mesh(const size_t x, const size_t y, const size_t z) {
 	Mesh mesh;

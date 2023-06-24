@@ -22,4 +22,12 @@ public:
 	Voxel operator()(const size_t x, const size_t y, const size_t z) const { // Getter
 		return data[ index(x,y,z) ];
 	}
+
+	Voxel& operator()(const vec3i voxel) { // Setter
+		return (*this)(voxel.x, voxel.y, voxel.z);
+	}
+
+	Voxel operator()(const vec3i voxel) const { // Getter
+		return (*this)(voxel.x, voxel.y, voxel.z);
+	}
 };
