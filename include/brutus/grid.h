@@ -21,7 +21,7 @@ private:
 	void correct_boundry_voxel(vec3i& chunk, vec3i& voxel); // Gets voxel from next chunk
 
 public:
-	Grid();
+	Grid(){}
 	Grid(size_t size_x, size_t size_y, size_t size_z);
 	~Grid();
 
@@ -194,10 +194,6 @@ inline void Grid::correct_boundry_voxel(vec3i& chunk, vec3i& voxel) {
 		chunk.z += 1;
 		voxel.z = 0;
 	}
-}
-
-inline Grid::Grid() {
-
 }
 
 inline Grid::Grid(size_t size_x, size_t size_y, size_t size_z) {
