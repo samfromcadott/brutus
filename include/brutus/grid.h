@@ -101,20 +101,9 @@ inline void Grid::neighborhood_mesh(Mesh& mesh, vec3i chunk, vec3i voxel) {
 		vec3f v2 = vertex_from_edge(chunk, voxel, face.v2);
 
 		// Add the face to the mesh
-		mesh.vertices[mesh.vertex_count*3+0] = v0.x;
-		mesh.vertices[mesh.vertex_count*3+1] = v0.y;
-		mesh.vertices[mesh.vertex_count*3+2] = v0.z;
-		mesh.vertex_count += 1;
-
-		mesh.vertices[mesh.vertex_count*3+0] = v1.x;
-		mesh.vertices[mesh.vertex_count*3+1] = v1.y;
-		mesh.vertices[mesh.vertex_count*3+2] = v1.z;
-		mesh.vertex_count += 1;
-
-		mesh.vertices[mesh.vertex_count*3+0] = v2.x;
-		mesh.vertices[mesh.vertex_count*3+1] = v2.y;
-		mesh.vertices[mesh.vertex_count*3+2] = v2.z;
-		mesh.vertex_count += 1;
+		mesh.add_vertex(v0);
+		mesh.add_vertex(v1);
+		mesh.add_vertex(v2);
 	}
 
 }

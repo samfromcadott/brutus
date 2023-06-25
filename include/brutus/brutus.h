@@ -11,8 +11,8 @@ class Chunk;
 struct Voxel;
 struct Mesh;
 
-#include "mesh.h"
 #include "vectors.h"
+#include "mesh.h"
 #include "voxel.h"
 #include "chunk.h"
 #include "grid.h"

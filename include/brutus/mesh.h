@@ -13,4 +13,11 @@ struct Mesh {
 		if (tex_coords != nullptr) delete[] tex_coords;
 		if (indices != nullptr) delete[] indices;
 	}
+
+	void add_vertex(const vec3f& vertex) {
+		vertices[vertex_count*3+0] = vertex.x;
+		vertices[vertex_count*3+1] = vertex.y;
+		vertices[vertex_count*3+2] = vertex.z;
+		vertex_count += 1;
+	}
 };
