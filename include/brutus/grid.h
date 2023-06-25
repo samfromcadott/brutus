@@ -17,10 +17,14 @@ private:
 	Case neighborhood_case(vec3i chunk, vec3i voxel); // Determines the case of a neighborhood
 	void neighborhood_mesh(Mesh& mesh, vec3i chunk, vec3i voxel); // Adds triangles to mesh for neighborhood of voxel
 	vec3f vertex_from_edge(vec3i chunk, vec3i voxel, const Edge edge); // Gets vertex position for edge in neighborhood of voxel
+	vec3f normal_from_edge(vec3i chunk, vec3i voxel, const Edge edge); // Calculates normals for a vertex
 	vec3f point_between_voxels(const vec3i chunk, vec3i a, vec3i b); // Finds the 0 point between two opposite sign voxels
 	void correct_boundry_voxel(vec3i& chunk, vec3i& voxel); // Gets voxel from next chunk
 
 public:
+	bool calculate_normals = true;
+	bool calculate_uv = true;
+
 	Grid(){}
 	Grid(size_t size_x, size_t size_y, size_t size_z);
 	~Grid();
@@ -109,47 +113,7 @@ inline void Grid::neighborhood_mesh(Mesh& mesh, vec3i chunk, vec3i voxel) {
 }
 
 inline vec3f Grid::vertex_from_edge(vec3i chunk, vec3i voxel, const Edge edge) {
-	vec3f vertex;
-
-	// Find to surface point of the edge
-	switch (edge) {
-		case 0:
-			vertex = point_between_voxels(chunk, voxel, voxel + (vec3i){0,0,1});
-			break;
-		case 1:
-			vertex = point_between_voxels(chunk, voxel + (vec3i){0,0,1}, voxel + (vec3i){1,0,1});
-			break;
-		case 2:
-			vertex = point_between_voxels(chunk, voxel + (vec3i){1,0,0}, voxel + (vec3i){1,0,1});
-			break;
-		case 3:
-			vertex = point_between_voxels(chunk, voxel, voxel + (vec3i){1,0,0});
-			break;
-		case 4:
-			vertex = point_between_voxels(chunk, voxel + (vec3i){0,1,0}, voxel + (vec3i){0,1,1});
-			break;
-		case 5:
-			vertex = point_between_voxels(chunk, voxel + (vec3i){0,1,1}, voxel + (vec3i){1,1,1});
-			break;
-		case 6:
-			vertex = point_between_voxels(chunk, voxel + (vec3i){1,1,0}, voxel + (vec3i){1,1,1});
-			break;
-		case 7:
-			vertex = point_between_voxels(chunk, voxel + (vec3i){0,1,0}, voxel + (vec3i){1,1,0});
-			break;
-		case 8:
-			vertex = point_between_voxels(chunk, voxel, voxel + (vec3i){0,1,0});
-			break;
-		case 9:
-			vertex = point_between_voxels(chunk, voxel + (vec3i){0,0,1}, voxel + (vec3i){0,1,1});
-			break;
-		case 10:
-			vertex = point_between_voxels(chunk, voxel + (vec3i){1,0,1}, voxel + (vec3i){1,1,1});
-			break;
-		case 11:
-			vertex = point_between_voxels(chunk, voxel + (vec3i){1,0,0}, voxel + (vec3i){1,1,0});
-			break;
-	}
+	vec3f vertex = point_between_voxels( chunk, voxel + edge_offsets[edge][0], voxel + edge_offsets[edge][1] );
 
 	return vertex;
 }
