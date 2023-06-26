@@ -226,8 +226,8 @@ inline Voxel Grid::operator()(const vec3i voxel) const {
 inline Mesh Grid::generate_mesh(const size_t x, const size_t y, const size_t z) {
 	Mesh mesh;
 
-	mesh.vertices = new float[11*8*8*8]();
-	mesh.normals = new float[11*8*8*8]();
+	mesh.vertices = new float[11 * Chunk::size * Chunk::size * Chunk::size]();
+	mesh.normals = new float[11 * Chunk::size * Chunk::size * Chunk::size]();
 
 	// Get the start coordinates
 	int start_x = x * Chunk::size, end_x = (x+1) * Brutus::Chunk::size;
