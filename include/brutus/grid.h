@@ -19,7 +19,6 @@ private:
 	vec3f vertex_from_edge(vec3i voxel, const Edge edge); // Gets vertex position for edge in neighborhood of voxel
 	vec3f normal_from_edge(vec3i voxel, const Edge edge); // Calculates normals for a vertex
 	vec3f point_between_voxels(const vec3i a, const vec3i b); // Finds the 0 point between two opposite sign voxels
-	void correct_boundry_voxel(vec3i& voxel); // Gets voxel from next chunk
 
 public:
 	bool calculate_normals = true;
@@ -79,7 +78,6 @@ inline Grid::Case Grid::neighborhood_case(vec3i voxel) {
 
 inline void Grid::neighborhood_mesh(Mesh& mesh, vec3i voxel) {
 	// Determine the case of the neighborhood
-	// Case c = neighborhood_case(chunk, voxel);
 	Case c = neighborhood_case(voxel);
 	if (c == 0 || c == 255) return; // These cases don't have vertices
 
