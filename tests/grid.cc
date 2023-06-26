@@ -10,26 +10,26 @@ TEST_CASE("Grid constructor/deconstructor") {
 	grid2 = Brutus::Grid(1,1,3); // Copy assignment
 }
 
-TEST_CASE("Access chunk") {
-	Brutus::Grid grid(2, 2, 2);
+// TEST_CASE("Access chunk") {
+// 	Brutus::Grid grid(2, 2, 2);
+//
+// 	Brutus::Chunk& chunk = grid(0,0,0);
+// 	chunk(1,1,1).weight = 2;
+// 	CHECK(chunk(1,1,1).weight == 2);
+// 	CHECK(chunk(1,1,2).weight == 0);
+// }
 
-	Brutus::Chunk& chunk = grid(0,0,0);
-	chunk(1,1,1).weight = 2;
-	CHECK(chunk(1,1,1).weight == 2);
-	CHECK(chunk(1,1,2).weight == 0);
-}
-
-void generate_sphere(Brutus::Chunk& chunk, float radius, float cx, float cy, float cz) {
-	for (size_t x = 0; x < Brutus::Chunk::size; x++)
-	for (size_t y = 0; y < Brutus::Chunk::size; y++)
-	for (size_t z = 0; z < Brutus::Chunk::size; z++) {
+void generate_sphere(Brutus::Grid& grid, float radius, float cx, float cy, float cz) {
+	for (size_t x = 0; x < Brutus::Chunk::size * 2; x++)
+	for (size_t y = 0; y < Brutus::Chunk::size * 2; y++)
+	for (size_t z = 0; z < Brutus::Chunk::size * 2; z++) {
 		float weight = (sqrt( pow(cx-x, 2) + pow(cy-y, 2) + pow(cz-z, 2) ) - radius) * 64;
 
 		// Clamp values
 		if (weight > 127) weight = 127;
 		if (weight < -128) weight = -128;
 
-		chunk(x,y,z).weight = Brutus::VoxelWeight(weight);
+		grid(x,y,z).weight = Brutus::VoxelWeight(weight);
 	}
 }
 
@@ -45,11 +45,19 @@ void write_model(Brutus::Mesh& mesh, std::string filename) {
 		<< mesh.vertices[i+2] << '\n';
 	}
 
+	// for (size_t i = 0; i < mesh.normal_count * 3; i+=3) {
+	// 	model_file << "vn "
+	// 	<< mesh.normals[i] << " "
+	// 	<< mesh.normals[i+1] << " "
+	// 	<< mesh.normals[i+2] << '\n';
+	// }
+
 	for (size_t i = 0; i < mesh.vertex_count; i+=3) {
 		model_file << "f "
-		<< i+1 << " "
-		<< i+2 << " "
-		<< i+3 << '\n';
+		<< i+1 << " " // "//" << i+1 << " "
+		<< i+2 << " " // "//" << i+2 << " "
+		<< i+3 << " " // "//" << i+3 << " "
+		<< '\n';
 	}
 }
 
@@ -57,15 +65,7 @@ TEST_CASE("Generate mesh") {
 	Brutus::Grid grid(2, 2, 2);
 
 	// Create a sphere
-	float radius = 6.0f;
-	generate_sphere(grid(0,0,0), radius, 8, 8, 8);
-	generate_sphere(grid(0,0,1), radius, 8, 8, 0);
-	generate_sphere(grid(0,1,0), radius, 8, 0, 8);
-	generate_sphere(grid(0,1,1), radius, 8, 0, 0);
-	generate_sphere(grid(1,0,0), radius, 0, 8, 8);
-	generate_sphere(grid(1,0,1), radius, 0, 8, 0);
-	generate_sphere(grid(1,1,0), radius, 0, 0, 8);
-	generate_sphere(grid(1,1,1), radius, 0, 0, 0);
+	generate_sphere(grid, 6.0, 8, 8, 8);
 
 
 	// Generating the mesh

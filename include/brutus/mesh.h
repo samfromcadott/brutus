@@ -5,7 +5,7 @@ struct Mesh {
 
 	unsigned short* indices = nullptr;
 
-	size_t vertex_count = 0, face_count = 0;
+	size_t vertex_count = 0, normal_count = 0, face_count = 0;
 
 	~Mesh() {
 		if (vertices != nullptr) delete[] vertices;
@@ -19,5 +19,12 @@ struct Mesh {
 		vertices[vertex_count*3+1] = vertex.y;
 		vertices[vertex_count*3+2] = vertex.z;
 		vertex_count += 1;
+	}
+
+	void add_normal(const vec3f& normal) {
+		normals[normal_count*3+0] = normal.x;
+		normals[normal_count*3+1] = normal.y;
+		normals[normal_count*3+2] = normal.z;
+		normal_count += 1;
 	}
 };
