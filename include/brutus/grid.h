@@ -101,17 +101,17 @@ inline void Grid::neighborhood_mesh(Mesh& mesh, vec3i voxel) {
 		mesh.add_vertex(v2);
 
 		// Calculate normals
-		// if (calculate_normals) {
-		// 	// Find the location of each vertex
-		// 	vec3f n0 = normal_from_edge(chunk, voxel, face.v0);
-		// 	vec3f n1 = normal_from_edge(chunk, voxel, face.v1);
-		// 	vec3f n2 = normal_from_edge(chunk, voxel, face.v2);
-		//
-		// 	// Add the face to the mesh
-		// 	mesh.add_normal(n0);
-		// 	mesh.add_normal(n1);
-		// 	mesh.add_normal(n2);
-		// }
+		if (calculate_normals) {
+			// Find the location of each vertex
+			vec3f n0 = normal_from_edge(voxel, face.v0);
+			vec3f n1 = normal_from_edge(voxel, face.v1);
+			vec3f n2 = normal_from_edge(voxel, face.v2);
+
+			// Add the face to the mesh
+			mesh.add_normal(n0);
+			mesh.add_normal(n1);
+			mesh.add_normal(n2);
+		}
 	}
 
 }
@@ -121,37 +121,41 @@ inline vec3f Grid::vertex_from_edge(vec3i voxel, const Edge edge) {
 }
 
 inline vec3f Grid::normal_from_edge(vec3i voxel, const Edge edge) {
-	// // Get the origins of both voxels
-	// vec3i coord_a = voxel + edge_offsets[edge][0];
-	// vec3i coord_b = voxel + edge_offsets[edge][1];
-	//
-	// vec3f a = voxel_origin(chunk, ca);
-	// vec3f b = voxel_origin(chunk, cb);
-	//
-	// // Get the direction vector from voxel a to voxel b
-	// // vec3f d = a - b; // d will always be normalized
-	// // vec3f normal = d;
-	//
-	// // Read the weight of both voxels
-	// vec3i chunk_a = chunk;
-	// vec3i chunk_b = chunk;
-	// correct_boundry_voxel(chunk_a, coord_a);
-	// correct_boundry_voxel(chunk_b, coord_b);
-	//
-	// VoxelWeight weight_a = (*this)(chunk_a)(ca).weight;
-	// VoxelWeight weight_b = (*this)(chunk_b)(cb).weight;
-	//
-	// // if (weight_b < weight_a) normal = normal * -1;
-	// // Determine which voxel is the filled one
-	// vec3i coord;
-	// (weight_b < weight_a) ? coord = coord_b : coord = coord_a;
-	//
-	// // Get the coordinates for calculating the gradient
-	// int x0 = coord.x - 1, x1 = coord.x + 1;
-	// int y0 = coord.y - 1, y1 = coord.y + 1;
-	// int z0 = coord.z - 1, z1 = coord.z + 1;
+	// Get the origins of both voxels
+	vec3i coord_a = voxel + edge_offsets[edge][0];
+	vec3i coord_b = voxel + edge_offsets[edge][1];
 
-	vec3f normal;
+	// Read the weight of both voxels
+	VoxelWeight weight_a = (*this)(coord_a).weight;
+	VoxelWeight weight_b = (*this)(coord_b).weight;
+
+	// if (weight_b < weight_a) normal = normal * -1;
+
+	// Determine which voxel is the filled one
+	vec3i coord;
+	(weight_b < weight_a) ? coord = coord_b : coord = coord_a;
+
+	// Get the coordinates for calculating the gradient
+	const int total_size_x = Chunk::size * size_x;
+	const int total_size_y = Chunk::size * size_y;
+	const int total_size_z = Chunk::size * size_z;
+
+	int x0 = (coord.x == 0) ? 0 : coord.x - 1;
+	int y0 = (coord.y == 0) ? 0 : coord.y - 1;
+	int z0 = (coord.z == 0) ? 0 : coord.z - 1;
+	int x1 = (coord.x >= total_size_x ) ? total_size_x - 1 : coord.x + 1;
+	int y1 = (coord.y >= total_size_y ) ? total_size_y - 1 : coord.y + 1;
+	int z1 = (coord.z >= total_size_z ) ? total_size_z - 1 : coord.z + 1;
+
+	// Get the delta on each axis
+	float dx = (*this)(x1, coord.y, coord.z).weight - (*this)(x0, coord.y, coord.z).weight;
+	float dy = (*this)(coord.x, y1, coord.z).weight - (*this)(coord.x, y0, coord.z).weight;
+	float dz = (*this)(coord.x, coord.y, z1).weight - (*this)(coord.x, coord.y, z0).weight;
+
+	// Compute the gradient
+	vec3f gradient = {dx, dy, dz};
+	vec3f normal = gradient.normalized();
+
 	return normal;
 }
 
