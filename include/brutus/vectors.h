@@ -24,6 +24,17 @@ struct vec3f {
 			z * other
 		};
 	}
+
+	vec3f normalized() {
+		vec3f v = *this;
+
+		float length = sqrt( pow(v.x, 2) + pow(v.y, 2) + pow(v.z, 2) );
+		if (length == 0.0) length = 1.0;
+
+		v = v * (1.0 / length);
+
+		return v;
+	}
 };
 
 struct vec3i {
