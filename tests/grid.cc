@@ -52,6 +52,12 @@ void write_model(Brutus::Mesh& mesh, std::string filename) {
 		<< mesh.normals[i+2] << '\n';
 	}
 
+	// for (size_t i = 0; i < mesh.tex_coord_count * 2; i+=2) {
+	// 	model_file << "vt "
+	// 	<< mesh.tex_coords[i] << " "
+	// 	<< mesh.tex_coords[i+1] << "\n";
+	// }
+
 	for (size_t i = 0; i < mesh.vertex_count; i+=3) {
 		model_file << "f "
 		<< i+3 << "//" << i+3 << " "

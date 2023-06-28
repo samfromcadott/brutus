@@ -18,6 +18,7 @@ private:
 	void neighborhood_mesh(Mesh& mesh, vec3i voxel); // Adds triangles to mesh for neighborhood of voxel
 	vec3f vertex_from_edge(vec3i voxel, const Edge edge); // Gets vertex position for edge in neighborhood of voxel
 	vec3f normal_from_edge(vec3i voxel, const Edge edge); // Calculates normals for a vertex
+	vec2f uv_from_vertex(const vec3f vertex, const vec3f normal); // Calculates texture coordinates from existing vertex
 	vec3f point_between_voxels(const vec3i a, const vec3i b); // Finds the 0 point between two opposite sign voxels
 
 public:
@@ -112,6 +113,24 @@ inline void Grid::neighborhood_mesh(Mesh& mesh, vec3i voxel) {
 			mesh.add_normal(n1);
 			mesh.add_normal(n2);
 		}
+
+		// // Calculate texture coordinates
+		// if (calculate_uv) {
+		// 	// Get the face normal (used for texture projection)
+		// 	vec3f e0 = v1 - v0;
+		// 	vec3f e1 = v2 - v1;
+		// 	vec3f face_normal = e0.cross(e1);
+		//
+		// 	// Find the location of each vertex
+		// 	vec2f t0 = uv_from_vertex(v0, face_normal);
+		// 	vec2f t1 = uv_from_vertex(v1, face_normal);
+		// 	vec2f t2 = uv_from_vertex(v2, face_normal);
+		//
+		// 	// Add the face to the mesh
+		// 	mesh.add_uv(t0);
+		// 	mesh.add_uv(t1);
+		// 	mesh.add_uv(t2);
+		// }
 	}
 
 }
@@ -129,8 +148,6 @@ inline vec3f Grid::normal_from_edge(vec3i voxel, const Edge edge) {
 	VoxelWeight weight_a = (*this)(coord_a).weight;
 	VoxelWeight weight_b = (*this)(coord_b).weight;
 
-	// if (weight_b < weight_a) normal = normal * -1;
-
 	// Determine which voxel is the filled one
 	vec3i coord;
 	(weight_b < weight_a) ? coord = coord_b : coord = coord_a;
@@ -143,9 +160,9 @@ inline vec3f Grid::normal_from_edge(vec3i voxel, const Edge edge) {
 	int x0 = (coord.x == 0) ? 0 : coord.x - 1;
 	int y0 = (coord.y == 0) ? 0 : coord.y - 1;
 	int z0 = (coord.z == 0) ? 0 : coord.z - 1;
-	int x1 = (coord.x >= total_size_x ) ? total_size_x - 1 : coord.x + 1;
-	int y1 = (coord.y >= total_size_y ) ? total_size_y - 1 : coord.y + 1;
-	int z1 = (coord.z >= total_size_z ) ? total_size_z - 1 : coord.z + 1;
+	int x1 = (coord.x >= total_size_x) ? total_size_x - 1 : coord.x + 1;
+	int y1 = (coord.y >= total_size_y) ? total_size_y - 1 : coord.y + 1;
+	int z1 = (coord.z >= total_size_z) ? total_size_z - 1 : coord.z + 1;
 
 	// Get the delta on each axis
 	float dx = (*this)(x1, coord.y, coord.z).weight - (*this)(x0, coord.y, coord.z).weight;
@@ -157,6 +174,20 @@ inline vec3f Grid::normal_from_edge(vec3i voxel, const Edge edge) {
 	vec3f normal = gradient.normalized();
 
 	return normal;
+}
+
+inline vec2f Grid::uv_from_vertex(const vec3f vertex, const vec3f normal) {
+	vec2f tex_coord;
+
+	vec3f U = normal.cross( {0, 0, 1} ); // Axis for x component of tex_coord
+	if ( U.dot(U) < 0.001 ) U = {1, 0, 0};
+	else U = U.normalized();
+
+	vec3f V = normal.cross(U).normalized(); // Axis for y component of tex_coord
+
+	tex_coord = (vec2f){ vertex.dot(U), vertex.dot(V) };
+
+	return tex_coord;
 }
 
 inline vec3f Grid::point_between_voxels(vec3i a, vec3i b) {
@@ -232,6 +263,7 @@ inline Mesh Grid::generate_mesh(const size_t x, const size_t y, const size_t z) 
 
 	mesh.vertices = new float[11 * Chunk::size * Chunk::size * Chunk::size]();
 	mesh.normals = new float[11 * Chunk::size * Chunk::size * Chunk::size]();
+	// mesh.tex_coords = new float[11 * Chunk::size * Chunk::size * Chunk::size]();
 
 	// Get the start coordinates
 	int start_x = x * Chunk::size, end_x = (x+1) * Brutus::Chunk::size;
