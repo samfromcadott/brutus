@@ -1,7 +1,7 @@
 struct vec3f {
 	float x, y, z;
 
-	vec3f operator+(const vec3f& other) {
+	vec3f operator+(const vec3f& other) const {
 		return {
 			x + other.x,
 			y + other.y,
@@ -9,7 +9,7 @@ struct vec3f {
 		};
 	}
 
-	vec3f operator-(const vec3f& other) {
+	vec3f operator-(const vec3f& other) const {
 		return {
 			x - other.x,
 			y - other.y,
@@ -17,7 +17,7 @@ struct vec3f {
 		};
 	}
 
-	vec3f operator*(const float& other) {
+	vec3f operator*(const float& other) const {
 		return {
 			x * other,
 			y * other,
@@ -25,7 +25,19 @@ struct vec3f {
 		};
 	}
 
-	vec3f normalized() {
+	vec3f cross(const vec3f& other) const {
+		return {
+			y * other.z - z * other.y,
+			z * other.x - x * other.z,
+			x * other.y - y * other.x
+		};
+	}
+
+	float dot(const vec3f& other) const {
+		return x * other.x + y * other.y + z * other.z;
+	}
+
+	vec3f normalized() const {
 		vec3f v = *this;
 
 		float length = sqrt( pow(v.x, 2) + pow(v.y, 2) + pow(v.z, 2) );
@@ -37,10 +49,46 @@ struct vec3f {
 	}
 };
 
+struct vec2f {
+	float x, y;
+
+	vec2f operator+(const vec2f& other) const {
+		return {
+			x + other.x,
+			y + other.y
+		};
+	}
+
+	vec2f operator-(const vec2f& other) const {
+		return {
+			x - other.x,
+			y - other.y
+		};
+	}
+
+	vec2f operator*(const float& other) const {
+		return {
+			x * other,
+			y * other
+		};
+	}
+
+	vec2f normalized() const {
+		vec2f v = *this;
+
+		float length = sqrt( pow(v.x, 2) + pow(v.y, 2) );
+		if (length == 0.0) length = 1.0;
+
+		v = v * (1.0 / length);
+
+		return v;
+	}
+};
+
 struct vec3i {
 	int x, y, z;
 
-	vec3i operator+(const vec3i& other) {
+	vec3i operator+(const vec3i& other) const {
 		return {
 			x + other.x,
 			y + other.y,
@@ -48,7 +96,7 @@ struct vec3i {
 		};
 	}
 
-	vec3i operator-(const vec3i& other) {
+	vec3i operator-(const vec3i& other) const {
 		return {
 			x - other.x,
 			y - other.y,
