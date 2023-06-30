@@ -1,5 +1,5 @@
 // This file is used to separate the lookup tables from the rest of the code
-static constexpr uint8_t case_face_count[] = { // Returns number of faces for a given case
+static constexpr uint8_t case_face_count[] = { ///< Returns number of faces for a given case
 	0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 2,
 	1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 3,
 	1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 3,
@@ -18,7 +18,7 @@ static constexpr uint8_t case_face_count[] = { // Returns number of faces for a 
 	2, 3, 3, 2, 3, 4, 2, 1, 3, 2, 4, 1, 2, 1, 1, 0
 };
 
-static constexpr EdgeFace case_faces[][5] = { // Returns faces for a given case
+static constexpr EdgeFace case_faces[][5] = { ///< Returns faces for a given case
 	{ {-1, -1, -1}, {-1, -1, -1}, {-1, -1, -1}, {-1, -1, -1}, {-1, -1, -1} },
 	{ { 0,  8,  3}, {-1, -1, -1}, {-1, -1, -1}, {-1, -1, -1}, {-1, -1, -1} },
 	{ { 0,  1,  9}, {-1, -1, -1}, {-1, -1, -1}, {-1, -1, -1}, {-1, -1, -1} },
@@ -277,7 +277,7 @@ static constexpr EdgeFace case_faces[][5] = { // Returns faces for a given case
 	{ {-1, -1, -1}, {-1, -1, -1}, {-1, -1, -1}, {-1, -1, -1}, {-1, -1, -1} }
 };
 
-static constexpr vec3i edge_offsets[][2] = { // Returns offsets from base voxel for voxels that share an edge
+static constexpr vec3i edge_offsets[][2] = { ///< Returns offsets from base voxel for voxels that share an edge
 	{ {0,0,0}, {0,0,1} },
 	{ {0,0,1}, {1,0,1} },
 	{ {1,0,0}, {1,0,1} },
