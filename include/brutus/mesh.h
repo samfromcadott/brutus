@@ -1,3 +1,5 @@
+/// This class stores vertex data.
+/// It is returned by `Grid::generate_mesh()`
 struct Mesh {
 	float* vertices = nullptr;
 	float* normals = nullptr;

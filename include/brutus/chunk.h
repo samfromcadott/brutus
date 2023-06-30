@@ -2,6 +2,8 @@
 #define BRUTUS_CHUNK_SIZE 8
 #endif
 
+/// This is used to store voxels. It does not need to be instanced directly.
+/// `Grid` acts as a container for `Chunk`.
 class Chunk {
 private:
 	friend class Grid;

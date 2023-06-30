@@ -1,8 +1,10 @@
+/// This class is used to generate meshes from voxel data.
+/// It is effectivly a 3D array of `Chunk`.
 class Grid {
 private:
-	typedef uint8_t Case; // Bitfield that stores which voxels in a neighborhood are below threshold
-	typedef int8_t Edge; // Index of edge in voxel neighborhood
-	struct EdgeFace { // Defines faces by the edges of the cube the vertices touch
+	typedef uint8_t Case; ///< Bitfield that stores which voxels in a neighborhood are below threshold
+	typedef int8_t Edge; ///< Index of edge in voxel neighborhood
+	struct EdgeFace { ///< Defines faces by the edges of the cube the vertices touch
 		Edge v0, v1, v2;
 	};
 
@@ -12,14 +14,14 @@ private:
 	size_t size_x, size_y, size_z;
 	Chunk* data = nullptr; // Array of Chunk
 
-	size_t index(const size_t x, const size_t y, const size_t z) const; // Returns the index of a coordinate
-	vec3f voxel_origin(const vec3i voxel); // Returns the world location of a voxel
-	Case neighborhood_case(vec3i voxel); // Determines the case of a neighborhood
-	void neighborhood_mesh(Mesh& mesh, vec3i voxel); // Adds triangles to mesh for neighborhood of voxel
-	vec3f vertex_from_edge(vec3i voxel, const Edge edge); // Gets vertex position for edge in neighborhood of voxel
-	vec3f normal_from_edge(vec3i voxel, const Edge edge); // Calculates normals for a vertex
-	vec2f uv_from_vertex(const vec3f vertex, const vec3f normal); // Calculates texture coordinates from existing vertex
-	vec3f point_between_voxels(const vec3i a, const vec3i b); // Finds the 0 point between two opposite sign voxels
+	size_t index(const size_t x, const size_t y, const size_t z) const; ///< Returns the index of a coordinate
+	vec3f voxel_origin(const vec3i voxel); ///< Returns the world location of a voxel
+	Case neighborhood_case(const vec3i voxel); ///< Determines the case of a neighborhood
+	void neighborhood_mesh(Mesh& mesh, const vec3i voxel); ///< Adds triangles to mesh for neighborhood of voxel
+	vec3f vertex_from_edge(const vec3i voxel, const Edge edge); ///< Gets vertex position for edge in neighborhood of voxel
+	vec3f normal_from_edge(const vec3i voxel, const Edge edge); ///< Calculates normals for a vertex
+	vec2f uv_from_vertex(const vec3f vertex, const vec3f normal); ///< Calculates texture coordinates from existing vertex
+	vec3f point_between_voxels(const vec3i a, const vec3i b); ///< Finds the 0 point between two opposite sign voxels
 
 public:
 	bool calculate_normals = true;
@@ -35,7 +37,7 @@ public:
 	Voxel& operator()(const vec3i voxel); // Setter
 	Voxel operator()(const vec3i voxel) const; // Getter
 
-	Mesh generate_mesh(const size_t x, const size_t y, const size_t z); // Generates a mesh for the given chunk
+	Mesh generate_mesh(const size_t x, const size_t y, const size_t z); ///< Generates a mesh for the given chunk
 };
 
 inline size_t Grid::index(const size_t x, const size_t y, const size_t z) const {
@@ -50,7 +52,7 @@ inline vec3f Grid::voxel_origin(const vec3i voxel) {
 	};
 }
 
-inline Grid::Case Grid::neighborhood_case(vec3i voxel) {
+inline Grid::Case Grid::neighborhood_case(const vec3i voxel) {
 	Case c = 0;
 
 	// Get all the voxel locations
@@ -77,7 +79,7 @@ inline Grid::Case Grid::neighborhood_case(vec3i voxel) {
 	return c;
 }
 
-inline void Grid::neighborhood_mesh(Mesh& mesh, vec3i voxel) {
+inline void Grid::neighborhood_mesh(Mesh& mesh, const vec3i voxel) {
 	// Determine the case of the neighborhood
 	Case c = neighborhood_case(voxel);
 	if (c == 0 || c == 255) return; // These cases don't have vertices
@@ -135,11 +137,11 @@ inline void Grid::neighborhood_mesh(Mesh& mesh, vec3i voxel) {
 
 }
 
-inline vec3f Grid::vertex_from_edge(vec3i voxel, const Edge edge) {
+inline vec3f Grid::vertex_from_edge(const vec3i voxel, const Edge edge) {
 	return point_between_voxels( voxel + edge_offsets[edge][0], voxel + edge_offsets[edge][1] );
 }
 
-inline vec3f Grid::normal_from_edge(vec3i voxel, const Edge edge) {
+inline vec3f Grid::normal_from_edge(const vec3i voxel, const Edge edge) {
 	// Get the origins of both voxels
 	vec3i coord_a = voxel + edge_offsets[edge][0];
 	vec3i coord_b = voxel + edge_offsets[edge][1];
@@ -190,7 +192,7 @@ inline vec2f Grid::uv_from_vertex(const vec3f vertex, const vec3f normal) {
 	return tex_coord;
 }
 
-inline vec3f Grid::point_between_voxels(vec3i a, vec3i b) {
+inline vec3f Grid::point_between_voxels(const vec3i a, const vec3i b) {
 	// Get the weight of both voxels
 	VoxelWeight weight_a = (*this)(a).weight;
 	VoxelWeight weight_b = (*this)(b).weight;
