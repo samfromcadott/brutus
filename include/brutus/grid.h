@@ -24,8 +24,8 @@ private:
 	vec3f point_between_voxels(const vec3i a, const vec3i b); ///< Finds the 0 point between two opposite sign voxels
 
 public:
-	bool calculate_normals = true;
-	bool calculate_uv = true;
+	bool calculate_normals = true; ///< Determines if normals are calculated when `generate_mesh()` is called.
+	bool calculate_uv = true; ///< Determines if texture coordinates are calculated when `generate_mesh()` is called.
 
 	Grid(){}
 	Grid(size_t size_x, size_t size_y, size_t size_z);
