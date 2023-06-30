@@ -264,7 +264,7 @@ inline Mesh Grid::generate_mesh(const size_t x, const size_t y, const size_t z) 
 	Mesh mesh;
 
 	mesh.vertices = new float[11 * Chunk::size * Chunk::size * Chunk::size]();
-	mesh.normals = new float[11 * Chunk::size * Chunk::size * Chunk::size]();
+	if (calculate_normals) mesh.normals = new float[11 * Chunk::size * Chunk::size * Chunk::size]();
 	// mesh.tex_coords = new float[11 * Chunk::size * Chunk::size * Chunk::size]();
 
 	// Get the start coordinates
