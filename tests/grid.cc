@@ -7,17 +7,19 @@
 TEST_CASE("Grid constructor/deconstructor") {
 	Brutus::Grid grid(2, 2, 2); // Constructor
 	Brutus::Grid grid2; // Default constructor
-	grid2 = Brutus::Grid(1,1,3); // Copy assignment
 }
 
-// TEST_CASE("Access chunk") {
-// 	Brutus::Grid grid(2, 2, 2);
-//
-// 	Brutus::Chunk& chunk = grid(0,0,0);
-// 	chunk(1,1,1).weight = 2;
-// 	CHECK(chunk(1,1,1).weight == 2);
-// 	CHECK(chunk(1,1,2).weight == 0);
-// }
+TEST_CASE("Copy assignment") {
+	Brutus::Grid grid;
+	grid = Brutus::Grid(1,1,3);
+}
+
+TEST_CASE("Set voxel weight") {
+	Brutus::Grid grid(2, 2, 2);
+
+	grid(1,1,1).weight = 2;
+	CHECK(grid(1,1,1).weight == 2);
+}
 
 void generate_sphere(Brutus::Grid& grid, float radius, float cx, float cy, float cz) {
 	for (size_t x = 0; x < Brutus::Chunk::size * 2; x++)
@@ -72,7 +74,6 @@ TEST_CASE("Generate mesh") {
 
 	// Create a sphere
 	generate_sphere(grid, 6.0, 8, 8, 8);
-
 
 	// Generating the mesh
 	Brutus::Mesh mesh = grid.generate_mesh(0, 0, 0);
