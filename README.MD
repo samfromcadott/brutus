@@ -71,8 +71,7 @@ int main() {
 		model_file << "f "
 		<< i+3 << "//" << i+3 << " " // Switch to CCW face winding
 		<< i+2 << "//" << i+2 << " "
-		<< i+1 << "//" << i+1 << " "
-		<< '\n';
+		<< i+1 << "//" << i+1 << '\n';
 	}
 
 	return 0;
