@@ -47,7 +47,7 @@ void write_model(Brutus::Mesh& mesh, std::string filename) {
 		<< mesh.vertices[i+2] << '\n';
 	}
 
-	for (size_t i = 0; i < mesh.normal_count * 3; i+=3) {
+	for (size_t i = 0; i < mesh.vertex_count * 3; i+=3) {
 		model_file << "vn "
 		<< mesh.normals[i] << " "
 		<< mesh.normals[i+1] << " "

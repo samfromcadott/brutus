@@ -92,47 +92,21 @@ inline void Grid::neighborhood_mesh(Mesh& mesh, const vec3i voxel) {
 	// Loop over faces
 	for (size_t i = 0; i < face_count; i++) {
 		EdgeFace face = case_faces[c][i];
+		Edge edges[3] = {face.v0, face.v1, face.v2};
 
-		// Find the location of each vertex
-		vec3f v0 = vertex_from_edge(voxel, face.v0);
-		vec3f v1 = vertex_from_edge(voxel, face.v1);
-		vec3f v2 = vertex_from_edge(voxel, face.v2);
+		for (size_t v = 0; v < 3; v++) {
+			vec3f vertex, normal;
 
-		// Add the face to the mesh
-		mesh.add_vertex(v0);
-		mesh.add_vertex(v1);
-		mesh.add_vertex(v2);
+			vertex = vertex_from_edge(voxel, edges[v]);
+			mesh.add_vertex(vertex);
 
-		// Calculate normals
-		if (calculate_normals) {
-			// Find the location of each vertex
-			vec3f n0 = normal_from_edge(voxel, face.v0);
-			vec3f n1 = normal_from_edge(voxel, face.v1);
-			vec3f n2 = normal_from_edge(voxel, face.v2);
+			if (calculate_normals) {
+				normal = normal_from_edge(voxel, edges[v]);
+				mesh.add_normal(normal);
+			}
 
-			// Add the face to the mesh
-			mesh.add_normal(n0);
-			mesh.add_normal(n1);
-			mesh.add_normal(n2);
+			mesh.vertex_count += 1;
 		}
-
-		// // Calculate texture coordinates
-		// if (calculate_uv) {
-		// 	// Get the face normal (used for texture projection)
-		// 	vec3f e0 = v1 - v0;
-		// 	vec3f e1 = v2 - v1;
-		// 	vec3f face_normal = e0.cross(e1);
-		//
-		// 	// Find the location of each vertex
-		// 	vec2f t0 = uv_from_vertex(v0, face_normal);
-		// 	vec2f t1 = uv_from_vertex(v1, face_normal);
-		// 	vec2f t2 = uv_from_vertex(v2, face_normal);
-		//
-		// 	// Add the face to the mesh
-		// 	mesh.add_uv(t0);
-		// 	mesh.add_uv(t1);
-		// 	mesh.add_uv(t2);
-		// }
 	}
 
 }
