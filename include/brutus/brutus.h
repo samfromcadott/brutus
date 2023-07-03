@@ -12,6 +12,10 @@ class Chunk;
 struct Voxel;
 struct Mesh;
 
+struct Size3D {
+	size_t x, y, z;
+};
+
 #include "vectors.h"
 #include "mesh.h"
 #include "voxel.h"

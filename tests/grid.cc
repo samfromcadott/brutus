@@ -105,3 +105,23 @@ TEST_CASE("Generate mesh") {
 	Brutus::Mesh mesh8 = grid.generate_mesh(1, 0, 1);
 	write_model(mesh8, "test8.obj");
 }
+
+TEST_CASE("Total size") {
+	Brutus::Grid grid(1, 2, 3);
+
+	auto [x, y, z] = grid.total_size();
+
+	CHECK(x == 8);
+	CHECK(y == 16);
+	CHECK(z == 24);
+}
+
+TEST_CASE("Chunk size") {
+	Brutus::Grid grid(1, 2, 3);
+
+	auto [x, y, z] = grid.chunk_size();
+
+	CHECK(x == 1);
+	CHECK(y == 2);
+	CHECK(z == 3);
+}

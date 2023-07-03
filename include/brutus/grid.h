@@ -38,6 +38,8 @@ public:
 	Voxel operator()(const vec3i voxel) const; // Getter
 
 	Mesh generate_mesh(const size_t x, const size_t y, const size_t z); ///< Generates a mesh for the given chunk
+	Size3D total_size(); ///< Returns the total size of the grid in voxels
+	Size3D chunk_size(); ///< Returns the size of the grid in chunks
 };
 
 inline size_t Grid::index(const size_t x, const size_t y, const size_t z) const {
@@ -108,7 +110,6 @@ inline void Grid::neighborhood_mesh(Mesh& mesh, const vec3i voxel) {
 			mesh.vertex_count += 1;
 		}
 	}
-
 }
 
 inline vec3f Grid::vertex_from_edge(const vec3i voxel, const Edge edge) {
@@ -242,9 +243,9 @@ inline Mesh Grid::generate_mesh(const size_t x, const size_t y, const size_t z) 
 	// mesh.tex_coords = new float[11 * Chunk::size * Chunk::size * Chunk::size]();
 
 	// Get the start coordinates
-	int start_x = x * Chunk::size, end_x = (x+1) * Brutus::Chunk::size;
-	int start_y = y * Chunk::size, end_y = (y+1) * Brutus::Chunk::size;
-	int start_z = z * Chunk::size, end_z = (z+1) * Brutus::Chunk::size;
+	int start_x = x * Chunk::size, end_x = (x+1) * Chunk::size;
+	int start_y = y * Chunk::size, end_y = (y+1) * Chunk::size;
+	int start_z = z * Chunk::size, end_z = (z+1) * Chunk::size;
 
 	// For each dimmension go an extra step if there is an adjacent chunk
 	int border_x = x == size_x - 1;
@@ -260,4 +261,12 @@ inline Mesh Grid::generate_mesh(const size_t x, const size_t y, const size_t z) 
 	}
 
 	return mesh;
+}
+
+inline Size3D Grid::total_size() {
+	return {Chunk::size * size_x, Chunk::size * size_y, Chunk::size * size_z};
+}
+
+inline Size3D Grid::chunk_size() {
+	return {size_x, size_y, size_z};
 }
