@@ -3,6 +3,17 @@ Brutus - Marching Cubes Library
 
 Brutus is a header-only library for generating meshes from volumetric data using marching cubes.
 
+Features
+--------------
+
+* Surface normal generation
+* Compiler-time option to change `Chunk` size (`BRUTUS_CHUNK_SIZE`)
+* Store additional data in voxels (such as terrain type)
+* C++ 17
+* No dependencies beyond the standard library
+* Header-only
+* Public domain license
+
 Example
 --------------
 
