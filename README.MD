@@ -39,7 +39,7 @@ int main() {
 
 	model_file << "# Test of the Brutus voxel library\n";
 
-	// Vertecies
+	// Vertices
 	for (size_t i = 0; i < mesh.vertex_count * 3; i+=3) {
 		model_file << "v "
 		<< mesh.vertices[i] << " "
