@@ -22,9 +22,9 @@ TEST_CASE("Set voxel weight") {
 }
 
 void generate_sphere(Brutus::Grid& grid, float radius, float cx, float cy, float cz) {
-	for (size_t x = 0; x < Brutus::Chunk::size * 2; x++)
-	for (size_t y = 0; y < Brutus::Chunk::size * 2; y++)
-	for (size_t z = 0; z < Brutus::Chunk::size * 2; z++) {
+	for (size_t x = 0; x < grid.total_size().x; x++)
+	for (size_t y = 0; y < grid.total_size().y; y++)
+	for (size_t z = 0; z < grid.total_size().z; z++) {
 		float weight = (sqrt( pow(cx-x, 2) + pow(cy-y, 2) + pow(cz-z, 2) ) - radius) * 64;
 
 		// Clamp values
