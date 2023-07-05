@@ -7,12 +7,18 @@ Features
 --------------
 
 * Surface normal generation
-* Compiler-time option to change `Chunk` size (`BRUTUS_CHUNK_SIZE`)
+* Compile-time option to change `Chunk` size (`BRUTUS_CHUNK_SIZE`)
 * Store additional data in voxels (such as terrain type)
 * C++ 17
 * No dependencies beyond the standard library
 * Header-only
 * Public domain license
+
+### Planned Features
+
+* Texture coordinate generation
+* 3D editor example program
+* Single file version
 
 Example
 --------------
