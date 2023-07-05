@@ -15,7 +15,7 @@ private:
 	}
 
 public:
-	static const size_t size = BRUTUS_CHUNK_SIZE; // Chunks are cubes so this is the same in all dimmensions
+	static const size_t size = BRUTUS_CHUNK_SIZE; ///< Chunks are cubes so this is the same in all dimmensions. Default value is 8.
 
 	Voxel& operator()(const size_t x, const size_t y, const size_t z) { // Setter
 		return data[ index(x,y,z) ];
