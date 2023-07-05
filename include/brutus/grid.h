@@ -32,6 +32,8 @@ public:
 	~Grid();
 
 	Grid& operator=(Grid other);
+	///
+	/// Voxels can be accessed by putting their coordinates in parentheses.
 	Voxel& operator()(const size_t x, const size_t y, const size_t z); // Setter
 	Voxel operator()(const size_t x, const size_t y, const size_t z) const; // Getter
 	Voxel& operator()(const vec3i voxel); // Setter

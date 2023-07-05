@@ -6,3 +6,4 @@ test
 build
 *.o
 *.zip
+docs/output
