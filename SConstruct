@@ -8,3 +8,5 @@ env = Environment(
 env['ENV']['TERM'] = os.environ['TERM'] # Colored output
 
 env.Program( "test", [ Glob("build/*.cc") ] )
+
+SConscript('viewer/SConscript')
