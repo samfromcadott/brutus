@@ -6,7 +6,7 @@ platform = 'x64-mingw-static'
 
 LIBS=['raylib', 'opengl32', 'gdi32', 'winmm']
 LIBPATH=[f'../vcpkg/installed/{platform}/lib']
-CPPPATH=[f'../vcpkg/installed/{platform}/include']
+CPPPATH=[f'../vcpkg/installed/{platform}/include', '../include']
 
 CCFLAGS='--target=x86_64-w64-windows-gnu -static -Wno-unknown-warning-option'
 CXXFLAGS='--target=x86_64-w64-windows-gnu -static -std=c++17 -Wno-unknown-warning-option'
