@@ -1,10 +1,27 @@
 import os
+from os.path import join, dirname
+import shutil
+
+platform = 'x64-mingw-static'
+
+LIBS=['raylib', 'opengl32', 'gdi32', 'winmm']
+LIBPATH=[f'../vcpkg/installed/{platform}/lib']
+CPPPATH=[f'../vcpkg/installed/{platform}/include']
+
+CCFLAGS='--target=x86_64-w64-windows-gnu -static -Wno-unknown-warning-option'
+CXXFLAGS='--target=x86_64-w64-windows-gnu -static -std=c++17 -Wno-unknown-warning-option'
+LINKFLAGS = '--target=x86_64-w64-windows-gnu'
 
 VariantDir('build', 'src', duplicate=False)
 env = Environment(
-	CPPPATH=['./include'],
-	CXXFLAGS='-g -Wall -std=c++17'
+	TOOLS=['clang', 'clang++', 'gnulink'],
+	CPPPATH=CPPPATH,
+	ENV = {'PATH' : os.environ['PATH']},
+	LIBS=LIBS,
+	LIBPATH=LIBPATH,
+	CXXFLAGS=CXXFLAGS,
+	LINKFLAGS=LINKFLAGS
 )
 env['ENV']['TERM'] = os.environ['TERM'] # Colored output
 
-env.Program( "bin/viewer", [ Glob("build/*.cc") ] )
+env.Program( "bin/viewer.exe", [ Glob("build/*.cc") ] )
