@@ -132,16 +132,12 @@ inline vec3f Grid::normal_from_edge(const vec3i voxel, const Edge edge) {
 	(weight_b < weight_a) ? coord = coord_b : coord = coord_a;
 
 	// Get the coordinates for calculating the gradient
-	const int total_size_x = Chunk::size * size_x;
-	const int total_size_y = Chunk::size * size_y;
-	const int total_size_z = Chunk::size * size_z;
-
 	int x0 = (coord.x == 0) ? 0 : coord.x - 1;
 	int y0 = (coord.y == 0) ? 0 : coord.y - 1;
 	int z0 = (coord.z == 0) ? 0 : coord.z - 1;
-	int x1 = (coord.x >= total_size_x) ? total_size_x - 1 : coord.x + 1;
-	int y1 = (coord.y >= total_size_y) ? total_size_y - 1 : coord.y + 1;
-	int z1 = (coord.z >= total_size_z) ? total_size_z - 1 : coord.z + 1;
+	int x1 = (coord.x >= (int)total_size().x) ? total_size().x - 1 : coord.x + 1;
+	int y1 = (coord.y >= (int)total_size().y) ? total_size().y - 1 : coord.y + 1;
+	int z1 = (coord.z >= (int)total_size().z) ? total_size().z - 1 : coord.z + 1;
 
 	// Get the delta on each axis
 	float dx = (*this)(x1, coord.y, coord.z).weight - (*this)(x0, coord.y, coord.z).weight;
