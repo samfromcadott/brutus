@@ -7,9 +7,9 @@
 // }
 
 void render_mesh(Brutus::Mesh& mesh) {
+	rlSetCullFace(RL_CULL_FACE_FRONT);
 	rlPushMatrix();
 	rlBegin(RL_TRIANGLES);
-	// rlColor3f(5.0, 8.0, 1.0);
 
 	// Loop over each face
 	for (size_t i = 0; i < mesh.vertex_count * 3; i+=3) {

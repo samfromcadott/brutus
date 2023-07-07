@@ -1,7 +1,9 @@
+#include <iostream>
 #include <raylib.h>
 #include <brutus/brutus.h>
 
 #include "mesh.hh"
+#include "camera.hh"
 
 int main(void) {
 	const int screenWidth = 800;
@@ -11,8 +13,8 @@ int main(void) {
 	InitWindow(screenWidth, screenHeight, "Brutus Viewer");
 
 	Camera3D camera = { 0 };
-	camera.position = (Vector3){ 10.0f, 10.0f, 10.0f };
-	camera.target = (Vector3){ 0.0f, 0.0f, 0.0f };
+	camera.position = (Vector3){ 0.0f, 0.0f, 8.0f };
+	camera.target = (Vector3){ 8.0f, 8.0f, 8.0f };
 	camera.up = (Vector3){ 0.0f, 0.0f, 1.0f };
 	camera.fovy = 45.0f;
 	camera.projection = CAMERA_PERSPECTIVE;
@@ -22,11 +24,11 @@ int main(void) {
 	SetTargetFPS(60);
 
 	// Create the shere
-	Brutus::Grid grid(1, 1, 1);
+	Brutus::Grid grid(2, 2, 2);
 
 	// Sphere properties
-	const float radius = 2.0;
-	const float cx = 3.5, cy = 3.5, cz = 3.5;
+	const float radius = 6.0;
+	const float cx = 8.0, cy = 8.0, cz = 8.0;
 
 	// Generate a sphere using an SDF
 	for (size_t x = 0; x < grid.total_size().x; x++)
@@ -45,6 +47,8 @@ int main(void) {
 
 
 	while ( !WindowShouldClose() ) {
+		update_camera(camera);
+
 		BeginDrawing();
 
 			ClearBackground({32, 32, 32, 255});
