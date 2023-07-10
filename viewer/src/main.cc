@@ -56,6 +56,7 @@ int main(void) {
 			BeginMode3D(camera);
 
 				render_mesh(mesh);
+				DrawCube(camera.target, 1.0, 1.0, 1.0, RED);
 
 			EndMode3D();
 
