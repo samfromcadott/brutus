@@ -47,7 +47,7 @@ int main(void) {
 	}
 
 	// Brutus::Mesh mesh = grid.generate_mesh(0, 0, 0); // Generate a mesh
-
+	rlDisableBackfaceCulling();
 	while ( !WindowShouldClose() ) {
 		get_edit(camera, grid);
 		update_camera(camera);
@@ -70,10 +70,6 @@ int main(void) {
 				const Color clear_grey = {224, 224, 224, 128};
 				Vector3 bounds = {(float)grid.total_size().x, (float)grid.total_size().y, (float)grid.total_size().z};
 				DrawCubeWiresV( Vector3Scale(bounds, 0.5), bounds, clear_grey );
-			EndMode3D();
-
-			BeginMode3D(camera);
-				rlSetCullFace(RL_CULL_FACE_BACK);
 
 				// Draw the brush location
 				Vector3 brush_location = intersection(camera, grid);

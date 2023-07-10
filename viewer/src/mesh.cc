@@ -7,7 +7,6 @@
 // }
 
 void render_mesh(Brutus::Mesh mesh) {
-	rlSetCullFace(RL_CULL_FACE_FRONT);
 	rlPushMatrix();
 	rlBegin(RL_TRIANGLES);
 
