@@ -1,6 +1,7 @@
 #include <iostream>
 #include <raylib.h>
 #include <raymath.h>
+#include <rlgl.h>
 #include <brutus/brutus.h>
 
 #include "mesh.hh"
@@ -56,23 +57,20 @@ int main(void) {
 			ClearBackground({32, 32, 32, 255});
 
 			BeginMode3D(camera);
-
 				render_mesh(mesh);
-				DrawCube(camera.target, 1.0, 1.0, 1.0, RED);
 
 				// Draw the bounds of the grid
 				const Color clear_grey = {224, 224, 224, 128};
 				Vector3 bounds = {(float)grid.total_size().x, (float)grid.total_size().y, (float)grid.total_size().z};
-				DrawCubeWiresV(
-					Vector3Scale(bounds, 0.5),
-					bounds,
-					clear_grey
-				);
+				DrawCubeWiresV( Vector3Scale(bounds, 0.5), bounds, clear_grey );
+			EndMode3D();
+
+			BeginMode3D(camera);
+				rlSetCullFace(RL_CULL_FACE_BACK);
 
 				// Draw the brush location
 				Vector3 brush_location = intersection(camera, grid);
 				DrawSphere(brush_location, 1.0, clear_grey);
-
 			EndMode3D();
 
 		EndDrawing();
