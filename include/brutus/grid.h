@@ -261,10 +261,10 @@ inline Mesh Grid::generate_mesh(const size_t x, const size_t y, const size_t z) 
 	return mesh;
 }
 
-inline Size3D Grid::total_size() {
+inline Size3D Grid::total_size() const {
 	return {Chunk::size * size_x, Chunk::size * size_y, Chunk::size * size_z};
 }
 
-inline Size3D Grid::chunk_size() {
+inline Size3D Grid::chunk_size() const {
 	return {size_x, size_y, size_z};
 }
