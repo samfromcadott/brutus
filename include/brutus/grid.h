@@ -40,8 +40,8 @@ public:
 	Voxel operator()(const vec3i voxel) const; // Getter
 
 	Mesh generate_mesh(const size_t x, const size_t y, const size_t z); ///< Generates a mesh for the given chunk
-	Size3D total_size(); ///< Returns the total size of the grid in voxels
-	Size3D chunk_size(); ///< Returns the size of the grid in chunks
+	Size3D total_size() const; ///< Returns the total size of the grid in voxels
+	Size3D chunk_size() const; ///< Returns the size of the grid in chunks
 };
 
 inline size_t Grid::index(const size_t x, const size_t y, const size_t z) const {
