@@ -1,5 +1,6 @@
 #include <iostream>
 #include <raylib.h>
+#include <raymath.h>
 #include <brutus/brutus.h>
 
 #include "mesh.hh"
@@ -57,6 +58,14 @@ int main(void) {
 
 				render_mesh(mesh);
 				DrawCube(camera.target, 1.0, 1.0, 1.0, RED);
+
+				// Draw the bounds of the grid
+				Vector3 bounds = {(float)grid.total_size().x, (float)grid.total_size().y, (float)grid.total_size().z};
+				DrawCubeWiresV(
+					Vector3Scale(bounds, 0.5),
+					bounds,
+					{224, 224, 224, 128}
+				);
 
 			EndMode3D();
 
