@@ -7,6 +7,7 @@
 #include "mesh.hh"
 #include "camera.hh"
 #include "editing.hh"
+#include "sdf.hh"
 
 int main(void) {
 	const int screenWidth = 800;
@@ -22,32 +23,13 @@ int main(void) {
 	camera.fovy = 45.0f;
 	camera.projection = CAMERA_PERSPECTIVE;
 
-	Vector3 cubePosition = { 0.0f, 0.0f, 0.0f };
-
 	SetTargetFPS(60);
+	rlDisableBackfaceCulling();
 
 	// Create the shere
 	Brutus::Grid grid(2, 2, 2);
+	SDF::sphere(grid, {8,8,8}, 6.0); // Generate a sphere using an SDF
 
-	// Sphere properties
-	const float radius = 6.0;
-	const float cx = 8.0, cy = 8.0, cz = 8.0;
-
-	// Generate a sphere using an SDF
-	for (size_t x = 0; x < grid.total_size().x; x++)
-	for (size_t y = 0; y < grid.total_size().y; y++)
-	for (size_t z = 0; z < grid.total_size().z; z++) {
-		float weight = (sqrt( pow(cx-x, 2) + pow(cy-y, 2) + pow(cz-z, 2) ) - radius) * 64;
-
-		// Clamp values
-		if (weight > 127) weight = 127;
-		if (weight < -128) weight = -128;
-
-		grid(x,y,z).weight = Brutus::VoxelWeight(weight);
-	}
-
-	// Brutus::Mesh mesh = grid.generate_mesh(0, 0, 0); // Generate a mesh
-	rlDisableBackfaceCulling();
 	while ( !WindowShouldClose() ) {
 		get_edit(camera, grid);
 		update_camera(camera);
