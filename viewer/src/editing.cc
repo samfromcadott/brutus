@@ -1,3 +1,4 @@
+#include <iostream>
 #include <raylib.h>
 #include <raymath.h>
 #include <brutus/brutus.h>
@@ -6,6 +7,11 @@
 
 void get_edit(const Camera& camera, Brutus::Grid& grid) {
 	Vector3 brush_location = intersection(camera, grid);
+
+	if (brush_location.x == -1) return; // Check if no intersection returned
+	if (!IsMouseButtonDown(0)) return;
+
+	grid( int(brush_location.x), int(brush_location.y), int(brush_location.z) ).weight = -128;
 }
 
 Vector3 intersection(const Camera& camera, const Brutus::Grid& grid) {
@@ -33,6 +39,6 @@ Vector3 intersection(const Camera& camera, const Brutus::Grid& grid) {
 
 bool point_in_bounds(const Brutus::Grid& grid, const Vector3 point) {
 	if (point.x < 0 || point.y < 0 || point.z < 0) return false;
-	if (point.x > grid.total_size().x + 1 || point.y > grid.total_size().y + 1 || point.z > grid.total_size().z + 1) return false;
+	if (point.x > grid.total_size().x || point.y > grid.total_size().y || point.z > grid.total_size().z) return false;
 	return true;
 }

@@ -16,7 +16,7 @@ void update_camera(Camera& camera) {
 	zoom -= GetMouseWheelMove() * GetFrameTime() * zoom_speed; // Zoom the camera
 	zoom = Clamp(zoom, zoom_min, zoom_max);
 
-	if ( IsMouseButtonDown(0) ) {
+	if ( IsMouseButtonDown(2) ) {
 		Vector2 delta = GetMouseDelta();
 
 		// Calculate the horizontal and vertical rotation

@@ -46,10 +46,10 @@ int main(void) {
 		grid(x,y,z).weight = Brutus::VoxelWeight(weight);
 	}
 
-	Brutus::Mesh mesh = grid.generate_mesh(0, 0, 0); // Generate a mesh
-
+	// Brutus::Mesh mesh = grid.generate_mesh(0, 0, 0); // Generate a mesh
 
 	while ( !WindowShouldClose() ) {
+		get_edit(camera, grid);
 		update_camera(camera);
 
 		BeginDrawing();
@@ -57,7 +57,14 @@ int main(void) {
 			ClearBackground({32, 32, 32, 255});
 
 			BeginMode3D(camera);
-				render_mesh(mesh);
+				render_mesh(grid.generate_mesh(0, 0, 0));
+				render_mesh(grid.generate_mesh(0, 0, 1));
+				render_mesh(grid.generate_mesh(0, 1, 0));
+				render_mesh(grid.generate_mesh(0, 1, 1));
+				render_mesh(grid.generate_mesh(1, 0, 0));
+				render_mesh(grid.generate_mesh(1, 0, 1));
+				render_mesh(grid.generate_mesh(1, 1, 0));
+				render_mesh(grid.generate_mesh(1, 1, 1));
 
 				// Draw the bounds of the grid
 				const Color clear_grey = {224, 224, 224, 128};
