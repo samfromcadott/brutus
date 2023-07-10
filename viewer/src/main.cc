@@ -5,6 +5,7 @@
 
 #include "mesh.hh"
 #include "camera.hh"
+#include "editing.hh"
 
 int main(void) {
 	const int screenWidth = 800;
@@ -60,12 +61,17 @@ int main(void) {
 				DrawCube(camera.target, 1.0, 1.0, 1.0, RED);
 
 				// Draw the bounds of the grid
+				const Color clear_grey = {224, 224, 224, 128};
 				Vector3 bounds = {(float)grid.total_size().x, (float)grid.total_size().y, (float)grid.total_size().z};
 				DrawCubeWiresV(
 					Vector3Scale(bounds, 0.5),
 					bounds,
-					{224, 224, 224, 128}
+					clear_grey
 				);
+
+				// Draw the brush location
+				Vector3 brush_location = intersection(camera, grid);
+				DrawSphere(brush_location, 1.0, clear_grey);
 
 			EndMode3D();
 
