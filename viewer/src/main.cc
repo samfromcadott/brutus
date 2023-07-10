@@ -26,7 +26,6 @@ int main(void) {
 	SetTargetFPS(60);
 	rlDisableBackfaceCulling();
 
-	// Create the shere
 	Brutus::Grid grid(2, 2, 2);
 	SDF::sphere(grid, {8,8,8}, 6.0); // Generate a sphere using an SDF
 

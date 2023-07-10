@@ -4,14 +4,15 @@
 #include <brutus/brutus.h>
 
 #include "editing.hh"
+#include "sdf.hh"
 
 void get_edit(const Camera& camera, Brutus::Grid& grid) {
 	Vector3 brush_location = intersection(camera, grid);
 
 	if (brush_location.x == -1) return; // Check if no intersection returned
-	if (!IsMouseButtonDown(0)) return;
+	if (!IsMouseButtonDown(0)) return; // Check for button press
 
-	grid( int(brush_location.x), int(brush_location.y), int(brush_location.z) ).weight = -128;
+	SDF::sphere(grid, brush_location, 2.0);
 }
 
 Vector3 intersection(const Camera& camera, const Brutus::Grid& grid) {
@@ -31,7 +32,10 @@ Vector3 intersection(const Camera& camera, const Brutus::Grid& grid) {
 
 		// Get closest voxel
 		Brutus::VoxelWeight weight = grid( floor(location.x), floor(location.y), floor(location.z) ).weight;
-		if (weight < 0) break; // Point is under surface, there is an intersection
+		if (weight >= 0) continue;
+
+		location = last_location; // Point is under surface, there is an intersection
+		break;
 	}
 
 	return location;
