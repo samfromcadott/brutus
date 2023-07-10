@@ -8,16 +8,22 @@ float sensitivity = 5.0;
 float rotate_h = 0.0;
 float rotate_v = 0.0;
 float zoom = 16.0;
+float zoom_speed = 30.0;
+float zoom_min = 16.0;
+float zoom_max = 64.0;
 
 void update_camera(Camera& camera) {
-	if ( !IsMouseButtonDown(0) ) return;
+	zoom -= GetMouseWheelMove() * GetFrameTime() * zoom_speed; // Zoom the camera
+	zoom = Clamp(zoom, zoom_min, zoom_max);
 
-	Vector2 delta = GetMouseDelta();
+	if ( IsMouseButtonDown(0) ) {
+		Vector2 delta = GetMouseDelta();
 
-	// Calculate the horizontal and vertical rotation
-	rotate_h = rotate_h - delta.x * GetFrameTime();
-	rotate_v = rotate_v + delta.y * GetFrameTime();
-	rotate_v = Clamp(rotate_v, -1.5, 1.5);
+		// Calculate the horizontal and vertical rotation
+		rotate_h = rotate_h - delta.x * GetFrameTime();
+		rotate_v = rotate_v + delta.y * GetFrameTime();
+		rotate_v = Clamp(rotate_v, -1.5, 1.5);
+	}
 
 	//Update view
 	Vector3 vector_h = {cos( rotate_h ), sin( rotate_h ), 0.0f};
