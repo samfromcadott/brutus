@@ -49,7 +49,7 @@ int main(void) {
 
 				// Draw the bounds of the grid
 				const Color clear_grey = {224, 224, 224, 128};
-				Vector3 bounds = {(float)grid.total_size().x, (float)grid.total_size().y, (float)grid.total_size().z};
+				Vector3 bounds = {(float)grid.total_size().x-1, (float)grid.total_size().y-1, (float)grid.total_size().z-1};
 				DrawCubeWiresV( Vector3Scale(bounds, 0.5), bounds, clear_grey );
 
 				// Draw the brush location
