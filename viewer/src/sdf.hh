@@ -2,6 +2,6 @@
 
 namespace SDF {
 
-void sphere(Brutus::Grid& grid, Vector3 center, float radius);
+void sphere(Brutus::Grid& grid, Vector3 center, float radius, int polarity);
 
 }

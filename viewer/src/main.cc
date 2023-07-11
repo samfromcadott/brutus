@@ -27,7 +27,7 @@ int main(void) {
 	rlDisableBackfaceCulling();
 
 	Brutus::Grid grid(2, 2, 2);
-	SDF::sphere(grid, {8,8,8}, 6.0); // Generate a sphere using an SDF
+	SDF::sphere(grid, {8,8,8}, 6.0, -1); // Generate a sphere using an SDF
 
 	while ( !WindowShouldClose() ) {
 		get_edit(camera, grid);

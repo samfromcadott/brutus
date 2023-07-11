@@ -10,9 +10,9 @@ void get_edit(const Camera& camera, Brutus::Grid& grid) {
 	Vector3 brush_location = intersection(camera, grid);
 
 	if (brush_location.x == -1) return; // Check if no intersection returned
-	if (!IsMouseButtonDown(0)) return; // Check for button press
 
-	SDF::sphere(grid, brush_location, 2.0);
+	if ( IsMouseButtonPressed(0) ) SDF::sphere(grid, brush_location, 2.0, -1);
+	if ( IsMouseButtonPressed(1) ) SDF::sphere(grid, brush_location, 2.0, +1);
 }
 
 Vector3 intersection(const Camera& camera, const Brutus::Grid& grid) {
