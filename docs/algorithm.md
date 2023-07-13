@@ -26,12 +26,20 @@ Mesh Generation
 
 Mesh generation involves finding the edges of the SDF where the values switch from negative to positive and using linear interpolation to place a vertex where the implicit value is zero.
 
+| ![Face creation](../../images/face-creation.png) |
+|:--:|
+| *Example of faces generated for different cases, black represents voxels with a negative weight* |
+
 Neighborhood Cases
 --------------
 
 A neighborhood is a set of eight voxels adjacent to each other. The `Case` of the neighborhood is a bitfield that encodes which voxels are negative. If all voxels in a neighborhood have the same sign then no mesh is generated for it. The origin of a neighborhood is the voxel with the lowest location on each axis.
 
 During mesh generation `Grid` loops over all voxels, determines the case of its neighborhood, then generates the faces for that neighborhood. Since generating the faces for each case is complex and time consuming, Brutus, like most marching cubes implementations, uses precomputed lookup tables.
+
+| ![Index layout](../../images/index-layout.png) |
+|:--:|
+| *Relative positions of each voxel and edge in a neighborhood* |
 
 ### Lookup Tables
 
