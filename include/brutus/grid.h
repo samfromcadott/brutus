@@ -57,8 +57,6 @@ inline vec3f Grid::voxel_origin(const vec3i voxel) {
 }
 
 inline Grid::Case Grid::neighborhood_case(const vec3i voxel) {
-	Case c = 0;
-
 	// Get all the voxel locations
 	vec3i voxels[8] = {
 		voxel,
@@ -77,6 +75,7 @@ inline Grid::Case Grid::neighborhood_case(const vec3i voxel) {
 		w[i] = (*this)(voxels[i]).weight;
 
 	// Set bits for each voxel with a negative weight
+	Case c = 0;
 	for (size_t i = 0; i < 8; i++)
 		if ( w[i] < 0 ) c ^= 1 << i;
 
