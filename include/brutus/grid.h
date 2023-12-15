@@ -60,13 +60,13 @@ inline Grid::Case Grid::neighborhood_case(const vec3i voxel) {
 	// Get all the voxel locations
 	vec3i voxels[8] = {
 		voxel,
-		voxel + (vec3i){0, 0, 1},
-		voxel + (vec3i){1, 0, 1},
-		voxel + (vec3i){1, 0, 0},
-		voxel + (vec3i){0, 1, 0},
-		voxel + (vec3i){0, 1, 1},
-		voxel + (vec3i){1, 1, 1},
-		voxel + (vec3i){1, 1, 0},
+		voxel + vec3i{0, 0, 1},
+		voxel + vec3i{1, 0, 1},
+		voxel + vec3i{1, 0, 0},
+		voxel + vec3i{0, 1, 0},
+		voxel + vec3i{0, 1, 1},
+		voxel + vec3i{1, 1, 1},
+		voxel + vec3i{1, 1, 0},
 	};
 
 	// Get weights
@@ -159,7 +159,7 @@ inline vec2f Grid::uv_from_vertex(const vec3f vertex, const vec3f normal) {
 
 	vec3f V = normal.cross(U).normalized(); // Axis for y component of tex_coord
 
-	tex_coord = (vec2f){ vertex.dot(U), vertex.dot(V) };
+	tex_coord = vec2f{ vertex.dot(U), vertex.dot(V) };
 
 	return tex_coord;
 }
