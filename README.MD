@@ -73,7 +73,7 @@ int main() {
 	// Faces
 	for (size_t i = 0; i < mesh.vertex_count; i+=3) {
 		model_file << "f "
-		<< i+1 << "//" << i+1 << " " // Switch to CCW face winding
+		<< i+1 << "//" << i+1 << " "
 		<< i+2 << "//" << i+2 << " "
 		<< i+3 << "//" << i+3 << '\n';
 	}
