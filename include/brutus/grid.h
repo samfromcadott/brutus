@@ -6,6 +6,10 @@ private:
 	typedef int8_t Edge; ///< Index of edge in voxel neighborhood
 	struct EdgeFace { ///< Defines faces by the edges of the cube the vertices touch
 		Edge v0, v1, v2;
+
+		EdgeFace invert() const {
+			return EdgeFace {v2, v1, v0};
+		}
 	};
 
 	// Include the lookup tables used for mesh generation
@@ -26,6 +30,7 @@ private:
 public:
 	bool calculate_normals = true; ///< Determines if normals are calculated when `generate_mesh()` is called.
 	bool calculate_uv = true; ///< Determines if texture coordinates are calculated when `generate_mesh()` is called.
+	bool winding_ccw = true; ///< Determines if faces have a counter clockwise winding order.
 
 	Grid(){}
 	Grid(size_t size_x, size_t size_y, size_t size_z);
@@ -95,6 +100,7 @@ inline void Grid::neighborhood_mesh(Mesh& mesh, const vec3i voxel) {
 	// Loop over faces
 	for (size_t i = 0; i < face_count; i++) {
 		EdgeFace face = case_faces[c][i];
+		if (winding_ccw) face = face.invert();
 		Edge edges[3] = {face.v0, face.v1, face.v2};
 
 		for (size_t v = 0; v < 3; v++) {

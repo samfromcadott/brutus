@@ -46,9 +46,9 @@ void write_model(Brutus::Mesh& mesh, std::string filename) {
 
 	for (size_t i = 0; i < mesh.vertex_count; i+=3) {
 		model_file << "f "
-		<< i+3 << "//" << i+3 << " "
-		<< i+2 << "//" << i+2 << " "
 		<< i+1 << "//" << i+1 << " "
+		<< i+2 << "//" << i+2 << " "
+		<< i+3 << "//" << i+3 << " "
 		<< '\n';
 	}
 }
