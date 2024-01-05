@@ -26,6 +26,7 @@ Example
 ```C++
 #include <iostream>
 #include <fstream>
+#include <algorithm>
 #include <brutus.h>
 
 int main() {
@@ -39,13 +40,10 @@ int main() {
 	for (size_t x = 0; x < grid.total_size().x; x++)
 	for (size_t y = 0; y < grid.total_size().y; y++)
 	for (size_t z = 0; z < grid.total_size().z; z++) {
-		float weight = (sqrt( pow(cx-x, 2) + pow(cy-y, 2) + pow(cz-z, 2) ) - radius) * 64;
+		int weight = (sqrt( pow(cx-x, 2) + pow(cy-y, 2) + pow(cz-z, 2) ) - radius) * 64;
+		weight = std::clamp(weight, -128, 127); // Clamp values
 
-		// Clamp values
-		if (weight > 127) weight = 127;
-		if (weight < -128) weight = -128;
-
-		grid(x,y,z).weight = Brutus::VoxelWeight(weight);
+		grid(x,y,z).weight = static_cast<Brutus::VoxelWeight>(weight);
 	}
 
 	Brutus::Mesh mesh = grid.generate_mesh(0, 0, 0); // Generate a mesh
@@ -75,9 +73,9 @@ int main() {
 	// Faces
 	for (size_t i = 0; i < mesh.vertex_count; i+=3) {
 		model_file << "f "
-		<< i+3 << "//" << i+3 << " " // Switch to CCW face winding
+		<< i+1 << "//" << i+1 << " " // Switch to CCW face winding
 		<< i+2 << "//" << i+2 << " "
-		<< i+1 << "//" << i+1 << '\n';
+		<< i+3 << "//" << i+3 << '\n';
 	}
 
 	return 0;
