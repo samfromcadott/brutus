@@ -7,6 +7,23 @@ struct Mesh {
 
 	size_t vertex_count = 0, face_count = 0;
 
+	Mesh() = default;
+
+	Mesh(Mesh&& other) {
+		this->vertices = other.vertices;
+		this->normals = other.normals;
+		this->tex_coords = other.tex_coords;
+
+		this->vertex_count = other.vertex_count;
+		this->face_count = other.face_count;
+
+		other.vertices = nullptr;
+		other.normals = nullptr;
+		other.tex_coords = nullptr;
+		other.vertex_count = 0;
+		other.face_count = 0;
+	}
+
 	~Mesh() {
 		if (vertices != nullptr) delete[] vertices;
 		if (normals != nullptr) delete[] normals;
