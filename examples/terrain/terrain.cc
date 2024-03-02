@@ -1,11 +1,15 @@
 #include <algorithm>
 #include <brutus/brutus.h>
+#include <raylib.h>
+#include <rlgl.h>
+#include <raymath.h>
 
 #include "noise.hh"
 #include "write_model.hh"
 #include "convert_mesh.hh"
 #include "height.hh"
 #include "mesh.hh"
+#include "fly_camera.hh"
 
 using namespace OpenSimplexNoise;
 
@@ -33,37 +37,35 @@ int main() {
 
 	std::cout << "Generated terrain" << '\n';
 
-	Brutus::Mesh mesh = grid.generate_mesh(0, 0, 0);
-	std::cout << "Generated mesh" << '\n';
-
-	std::cout << "Vertex count: " << mesh.vertex_count << '\n';
-
-	// write_model(mesh, "terrain.obj");
-	// std::cout << "Wrote model file" << '\n';
-
-	const int screenWidth = 800;
-	const int screenHeight = 450;
+	const int screenWidth = 1280;
+	const int screenHeight = 720;
 
 	SetConfigFlags(FLAG_WINDOW_RESIZABLE);
 	InitWindow(screenWidth, screenHeight, "Brutus Viewer");
 
-	Camera3D camera = { 0 };
-	camera.position = (Vector3){ -8.0f, -8.0f, 8.0f };
-	camera.target = (Vector3){ 0.0f, 0.0f, 0.0f };
-	camera.up = (Vector3){ 0.0f, 0.0f, 1.0f };
-	camera.fovy = 45.0f;
-	camera.projection = CAMERA_PERSPECTIVE;
+	FlyCamera camera;
 
 	SetTargetFPS(60);
 
 	while ( !WindowShouldClose() ) {
+		camera.update();
 
 		BeginDrawing();
 
 			ClearBackground({32, 32, 32, 255});
 
-			BeginMode3D(camera);
-				render_mesh(mesh);
+			BeginMode3D(camera.camera);
+				for (size_t x = 0; x < grid.chunk_size().x - 1; x++)
+				for (size_t y = 0; y < grid.chunk_size().y - 1; y++)
+				for (size_t z = 0; z < grid.chunk_size().z - 1; z++) {
+					Brutus::Mesh mesh = grid.generate_mesh(x, y, z);
+					render_mesh( mesh);
+				}
+
+				// Draw the bounds of the grid
+				const Color clear_grey = {224, 224, 224, 128};
+				Vector3 bounds = {(float)grid.total_size().x-1, (float)grid.total_size().y-1, (float)grid.total_size().z-1};
+				DrawCubeWiresV( Vector3Scale(bounds, 0.5), bounds, clear_grey );
 			EndMode3D();
 
 		EndDrawing();
