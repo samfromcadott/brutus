@@ -14,6 +14,7 @@ std::vector<float> heightmap(size_t size_x, size_t size_y, size_t size_z) {
 		float sy = static_cast<float>(y) / static_cast<float>(size_y);
 
 		float height = noise.eval(sx, sy) * size_z;
+		height = std::abs(height);
 
 		map[x * size_x + y] = height;
 	}
