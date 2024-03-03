@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include <raylib.h>
 #include <raymath.h>
 #include <brutus/brutus.h>

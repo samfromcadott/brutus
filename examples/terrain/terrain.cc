@@ -5,8 +5,6 @@
 #include <raymath.h>
 
 #include "noise.hh"
-#include "write_model.hh"
-#include "convert_mesh.hh"
 #include "height.hh"
 #include "mesh.hh"
 #include "fly_camera.hh"

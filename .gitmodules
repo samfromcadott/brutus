@@ -1,3 +1,9 @@
 [submodule "doctest"]
 	path = doctest
 	url = https://github.com/doctest/doctest/
+[submodule "examples/raylib"]
+	path = examples/raylib
+	url = https://github.com/raysan5/raylib
+[submodule "tests/doctest"]
+	path = tests/doctest
+	url = https://github.com/doctest/doctest
