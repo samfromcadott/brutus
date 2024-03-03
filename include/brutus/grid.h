@@ -259,7 +259,7 @@ inline Mesh Grid::generate_mesh(const size_t x, const size_t y, const size_t z) 
 	for (int i = start_x; i < end_x - border_x; i++)
 	for (int j = start_y; j < end_y - border_y; j++)
 	for (int k = start_z; k < end_z - border_z; k++) {
-		vec3i voxel = {(int)i, (int)j, (int)k};
+		vec3i voxel = {i, j, k};
 		neighborhood_mesh(mesh, voxel);
 	}
 
