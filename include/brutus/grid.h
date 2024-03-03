@@ -176,7 +176,7 @@ inline vec3f Grid::point_between_voxels(const vec3i a, const vec3i b) {
 	VoxelWeight weight_b = (*this)(b).weight;
 
 	// Interpolate between them to find where the surface is
-	const int x1 = 255;
+	const int x1 = weight_max - weight_min;
 	int x = ( -weight_a * x1 ) / (weight_b - weight_a);
 
 	// Calculate vertex location
