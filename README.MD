@@ -20,6 +20,28 @@ Features
 * 3D editor example program
 * Single file version
 
+Building
+-----------
+
+To build the examples and tests you need Git, CMake, and any C++ compiler.
+
+1. Clone this repository with git
+
+2. Create the build files
+
+```
+mkdir build
+cd build
+cmake ..
+cd ..
+```
+
+3. Compile
+
+```
+cmake --build build
+```
+
 Example
 --------------
 
