@@ -36,7 +36,7 @@ public:
 	Grid(size_t size_x, size_t size_y, size_t size_z);
 	~Grid();
 
-	Grid& operator=(Grid other);
+	Grid& operator=(Grid& other);
 	///
 	/// Voxels can be accessed by putting their coordinates in parentheses.
 	Voxel& operator()(const size_t x, const size_t y, const size_t z); // Setter
@@ -201,7 +201,7 @@ inline Grid::~Grid() {
 	if (data != nullptr) delete[] data;
 }
 
-inline Grid& Grid::operator=(Grid other) {
+inline Grid& Grid::operator=(Grid& other) {
 	if (data != nullptr) delete[] data;
 
 	this->data = other.data;
