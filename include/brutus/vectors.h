@@ -40,10 +40,10 @@ struct vec3f {
 	vec3f normalized() const {
 		vec3f v = *this;
 
-		float length = sqrt( pow(v.x, 2) + pow(v.y, 2) + pow(v.z, 2) );
+		float length = sqrt( pow(v.x, 2.0f) + pow(v.y, 2.0f) + pow(v.z, 2.0f) );
 		if (length == 0.0) length = 1.0;
 
-		v = v * (1.0 / length);
+		v = v * (1.0f / length);
 
 		return v;
 	}
@@ -76,10 +76,10 @@ struct vec2f {
 	vec2f normalized() const {
 		vec2f v = *this;
 
-		float length = sqrt( pow(v.x, 2) + pow(v.y, 2) );
+		float length = sqrt( pow(v.x, 2.0f) + pow(v.y, 2.0f) );
 		if (length == 0.0) length = 1.0;
 
-		v = v * (1.0 / length);
+		v = v * (1.0f / length);
 
 		return v;
 	}

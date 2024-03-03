@@ -137,17 +137,17 @@ inline vec3f Grid::normal_from_edge(const vec3i voxel, const Edge edge) {
 	(weight_b < weight_a) ? coord = coord_b : coord = coord_a;
 
 	// Get the coordinates for calculating the gradient
-	int x0 = (coord.x == 0) ? 0 : coord.x - 1;
-	int y0 = (coord.y == 0) ? 0 : coord.y - 1;
-	int z0 = (coord.z == 0) ? 0 : coord.z - 1;
-	int x1 = (coord.x >= (int)total_size().x) ? total_size().x - 1 : coord.x + 1;
-	int y1 = (coord.y >= (int)total_size().y) ? total_size().y - 1 : coord.y + 1;
-	int z1 = (coord.z >= (int)total_size().z) ? total_size().z - 1 : coord.z + 1;
+	size_t x0 = (coord.x == 0) ? 0 : coord.x - 1;
+	size_t y0 = (coord.y == 0) ? 0 : coord.y - 1;
+	size_t z0 = (coord.z == 0) ? 0 : coord.z - 1;
+	size_t x1 = (coord.x >= (int)total_size().x) ? total_size().x - 1 : coord.x + 1;
+	size_t y1 = (coord.y >= (int)total_size().y) ? total_size().y - 1 : coord.y + 1;
+	size_t z1 = (coord.z >= (int)total_size().z) ? total_size().z - 1 : coord.z + 1;
 
 	// Get the delta on each axis
-	float dx = (*this)(x1, coord.y, coord.z).weight - (*this)(x0, coord.y, coord.z).weight;
-	float dy = (*this)(coord.x, y1, coord.z).weight - (*this)(coord.x, y0, coord.z).weight;
-	float dz = (*this)(coord.x, coord.y, z1).weight - (*this)(coord.x, coord.y, z0).weight;
+	float dx = static_cast<float>( (*this)(x1, coord.y, coord.z).weight - (*this)(x0, coord.y, coord.z).weight );
+	float dy = static_cast<float>( (*this)(coord.x, y1, coord.z).weight - (*this)(coord.x, y0, coord.z).weight );
+	float dz = static_cast<float>( (*this)(coord.x, coord.y, z1).weight - (*this)(coord.x, coord.y, z0).weight );
 
 	// Compute the gradient
 	vec3f gradient = {dx, dy, dz};
@@ -246,9 +246,12 @@ inline Mesh Grid::generate_mesh(const size_t x, const size_t y, const size_t z) 
 	// mesh.tex_coords = new float[11 * Chunk::size * Chunk::size * Chunk::size]();
 
 	// Get the start coordinates
-	int start_x = x * Chunk::size, end_x = (x+1) * Chunk::size;
-	int start_y = y * Chunk::size, end_y = (y+1) * Chunk::size;
-	int start_z = z * Chunk::size, end_z = (z+1) * Chunk::size;
+	int start_x = static_cast<int>( x * Chunk::size );
+	int end_x = static_cast<int>( (x+1) * Chunk::size );
+	int start_y = static_cast<int>( y * Chunk::size );
+	int end_y = static_cast<int>( (y+1) * Chunk::size );
+	int start_z = static_cast<int>( z * Chunk::size );
+	int end_z = static_cast<int>( (z+1) * Chunk::size );
 
 	// For each dimmension go an extra step if there is an adjacent chunk
 	int border_x = x == size_x - 1;
