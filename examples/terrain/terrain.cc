@@ -60,8 +60,8 @@ std::vector< Brutus::Mesh > generate_meshes(Brutus::Grid& grid) {
 	std::vector< Brutus::Mesh > meshes;
 
 	for (size_t x = 0; x < grid.chunk_size().x - 1; x++)
-	for (size_t y = 0; y < grid.chunk_size().y - 1; y++)
-	for (size_t z = 0; z < grid.chunk_size().z - 1; z++) {
+	for (size_t y = 0; y < grid.chunk_size().y; y++)
+	for (size_t z = 0; z < grid.chunk_size().z; z++) {
 		meshes.push_back(grid.generate_mesh(x, y, z));
 	}
 
